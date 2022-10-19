@@ -1,0 +1,106 @@
+```{r reg, cache=cacheon, fig.cap="Registrering över tid", fig.width=9.5, fig.height=7}
+
+tot <- rsdata %>%
+  filter(indexyear %in% paste(seq((global_year - 6), global_year, 1))) %>%
+  count(indexyear) %>%
+  mutate(
+    byvar = 5,
+    byvarname = "Totalt Index och uppföljningar"
+  )
+
+totun <- rsdata %>%
+  filter(indexyear %in% paste(seq((global_year - 6), global_year, 1))) %>%
+  group_by(patientreference, indexyear) %>%
+  slice(1) %>%
+  ungroup() %>%
+  count(indexyear) %>%
+  mutate(
+    byvar = 6,
+    byvarname = "Unika patienter"
+  )
+
+type <- rsdata %>%
+  filter(indexyear %in% paste(seq((global_year - 6), global_year, 1))) %>%
+  group_by(indexyear) %>%
+  count(ttype) %>%
+  mutate(
+    byvar = 1:n(),
+    byvarname = ttype
+  ) %>%
+  ungroup() %>%
+  select(-ttype)
+
+hfdur <- rsdata %>%
+  filter(indexyear %in% paste(seq((global_year - 6), global_year, 1)), ttype == "Index") %>%
+  filter(!is.na(hfdur)) %>%
+  group_by(indexyear) %>%
+  count(hfdur) %>%
+  mutate(
+    byvar = 1 + (1:n()) / 100,
+    byvarname = hfdur
+  ) %>%
+  ungroup() %>%
+  select(-hfdur)
+
+all <- bind_rows(tot, totun, type, hfdur) %>%
+  pivot_wider(names_from = indexyear, values_from = n) %>%
+  arrange(byvar) %>%
+  select(-byvar)
+
+plotall <- all %>%
+  mutate(across(where(is.integer), ~ .x / 100)) %>%
+  select(-byvarname) %>%
+  t()
+
+cexmy <- 1
+# c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
+par(mar = c(4, 4, 0.5, 11.5) + 0.1)
+
+matplot(plotall,
+  type = "b",
+  # type = "l",
+  pch = 19,
+  col = global_colsblue[c(6, 5, 4, 3, 2, 1, 8, 7)],
+  lty = 1,
+  lwd = 3,
+  # cex = 1.2,
+  axes = FALSE,
+  xaxs = "i",
+  yaxs = "i",
+  xlim = c(1 - 0.2, length((global_year - 6):global_year) + 0.2),
+  ylab = "Antal registreringar (100-tal)",
+  xlab = labnams[1],
+  cex.lab = cexmy,
+  ylim = c(0, 18100 / 100)
+)
+
+box(bty = "l")
+
+axis(2, at = seq(0, 18000 / 100, 2000 / 100), cex.axis = cexmy, las = 2)
+
+axis(1, at = 1:length((global_year - 6):global_year), labels = (global_year - 6):global_year, cex.axis = cexmy)
+
+axis(2,
+  at = all %>% pull(!!sym(paste(global_year))) / 100 + c(0, +2.2, 1.5, +1.5, -1.5, -2.2, 0, 0),
+  labels = all %>% pull(byvarname),
+  line = -33,
+  tick = FALSE, cex.axis = cexmy,
+  las = 2,
+  hadj = 0,
+  gap.axis = -10000000
+)
+```
+
+```{r, cache=cacheon}
+
+all <- all %>%
+  mutate(byvarname = str_replace_all(byvarname, fixed("\u2265"), "$\\geq$"))
+
+colnams <- colnames(all)
+colnams[1] <- ""
+colnames(all) <- colnams
+
+write.xlsx(all, paste0("./output/tabs/registrering_", Sys.Date(), ".xlsx"), rowNames = FALSE, overwrite = T)
+
+default_kable(all, caption = "Registrering över tid", escape = F)
+```

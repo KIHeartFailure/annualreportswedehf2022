@@ -1,0 +1,51 @@
+```{r regkum, cache=cacheon, fig.cap="Kumulativt antal unika patienter"}
+
+tot <- rsdata %>%
+  filter(indexyear %in% paste(seq(2003, global_year, 1))) %>%
+  group_by(patientreference) %>%
+  arrange(indexdtm) %>%
+  slice(1) %>%
+  ungroup() %>%
+  count(indexyear) %>%
+  mutate(
+    cumn = cumsum(n),
+    indexyear = as.character(indexyear)
+  )
+
+ymaxmin <- (floor(max(tot$cumn) / 10000) + 1) * 100
+
+cexmy <- 0.9
+# c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
+par(mar = c(4, 4, 0.5, 0.5) + 0.1)
+
+plot(tot$indexyear,
+  tot$cumn / 100,
+  type = "b",
+  # type = "l",
+  pch = 19,
+  col = global_colsblue[5],
+  lty = 1,
+  lwd = 3,
+  # cex = 1.2,
+  axes = FALSE,
+  xaxs = "i",
+  yaxs = "i",
+  xlim = c(2003 - 0.2, global_year + 0.2),
+  ylab = "Antal unika patienter (100-tal)",
+  xlab = labnams[1],
+  cex.lab = cexmy,
+  ylim = c(0, ymaxmin)
+)
+
+box(bty = "l")
+
+axis(2, at = seq(0, ymaxmin, 100), cex.axis = cexmy, las = 2)
+
+axis(1, at = seq(2003, global_year, 1), cex.axis = cexmy)
+```
+
+```{r, cache=cacheon}
+tottab <- t(tot %>% select(-n))
+
+default_kable(tottab, caption = "Kumulativt antal unika patienter")
+```

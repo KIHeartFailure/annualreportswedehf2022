@@ -1,0 +1,129 @@
+```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Täckningsgrad 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
+
+cexmy <- 0.7
+# c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
+par(mar = c(4, 4, 0.5, 6) + 0.1)
+
+plot(tg_overtime$ar,
+  tg_overtime$inc,
+  type = "b",
+  # type = "l",
+  pch = 19,
+  col = global_colsblue[2],
+  lty = 1,
+  lwd = 3,
+  # cex = 1.2,
+  axes = FALSE,
+  xaxs = "i",
+  yaxs = "i",
+  xlim = c(2003 - 0.3, global_year + 0.3),
+  ylab = "Täckningsgrad (%)",
+  xlab = labnams[1],
+  cex.lab = cexmy,
+  ylim = c(0, 40)
+)
+matplot(tg_overtime$ar,
+  tg_overtime$prev,
+  type = "b",
+  pch = 19,
+  col = global_colsblue[5],
+  lty = 1,
+  lwd = 3,
+  add = T
+)
+
+box(bty = "l")
+
+axis(2, at = seq(0, 40, 5), cex.axis = cexmy, las = 2)
+
+axis(1, at = 2003:global_year, cex.axis = cexmy)
+
+axis(2,
+  at = tg_overtime %>% filter(ar == global_year) %>% select(prev),
+  labels = c("Prevalent"),
+  line = -21,
+  tick = FALSE, cex.axis = cexmy,
+  las = 2,
+  hadj = 0,
+  gap.axis = -10000000
+)
+axis(2,
+  at = tg_overtime %>% filter(ar == global_year - 1) %>% select(inc),
+  labels = c("Incident"),
+  line = -21,
+  tick = FALSE, cex.axis = cexmy,
+  las = 2,
+  hadj = 0,
+  gap.axis = -10000000
+)
+```
+
+\clearpage
+
+```{r, cache=cacheon}
+
+geo <- tg_lan %>%
+  filter(!is.na(region) & region != "Riket") %>%
+  mutate(
+    prev_cat = case_when(
+      pprev <= 5 ~ 1,
+      pprev <= 10 ~ 2,
+      pprev <= 20 ~ 3,
+      pprev <= 30 ~ 4,
+      pprev <= 40 ~ 5,
+      pprev <= 50 ~ 6,
+      pprev <= 60 ~ 7
+    ),
+    inc_cat = case_when(
+      pinc <= 5 ~ 1,
+      pinc <= 10 ~ 2,
+      pinc <= 20 ~ 3,
+      pinc <= 30 ~ 4,
+      pinc <= 40 ~ 5,
+      pinc <= 50 ~ 6,
+      pinc <= 60 ~ 7
+    ),
+    regnums = str_sub(X1, 1, 2),
+    region_mapnr = case_when(
+      regnums == "01" ~ 15,
+      regnums == "03" ~ 16,
+      regnums == "04" ~ 14,
+      regnums == "05" ~ 12,
+      regnums == "06" ~ 7,
+      regnums == "07" ~ 9,
+      regnums == "08" ~ 8,
+      regnums == "09" ~ 4,
+      regnums == "10" ~ 1,
+      regnums == "12" ~ 13,
+      regnums == "13" ~ 5,
+      regnums == "14" ~ 21,
+      regnums == "17" ~ 17,
+      regnums == "18" ~ 11,
+      regnums == "19" ~ 20,
+      regnums == "20" ~ 2,
+      regnums == "21" ~ 3,
+      regnums == "22" ~ 19,
+      regnums == "23" ~ 6,
+      regnums == "24" ~ 18,
+      regnums == "25" ~ 10
+    )
+  )
+```
+
+```{r tgmap, fig.cap=paste0("Täckningsgrad ", global_year, " (prevalent) och ", global_year -1, " (incident) uppdelat på region (karta)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
+
+
+# c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
+par(mar = c(0, 0, 0, 0) + 0.1)
+
+mapcols <- global_colsblue[1:7]
+
+mapdata <- geo %>%
+  arrange(region_mapnr)
+
+plot(swedenmap, col = mapcols[mapdata$prev_cat], border = 0)
+legend("topright", bty = "n", border = mapcols, fill = mapcols, legend = c("0-5%", "6-10%", "11-20%", "21-30%", "31-40%", "41-50%", "51-60%"))
+
+plot(swedenmap, col = mapcols[mapdata$inc_cat], border = 0)
+legend("topright", bty = "n", border = mapcols, fill = mapcols, legend = c("0-5%", "6-10%", "11-20%", "21-30%", "31-40%", "41-50%", "51-60%"))
+```

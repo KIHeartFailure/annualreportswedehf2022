@@ -1,0 +1,145 @@
+
+\blandscape
+
+```{r allki, cache=cacheon, fig.cap=paste0("Riket, alla ", nrow(qiinfo), " kvalitetsindikatorer ",  global_year), fig.width=9, fig.height=6}
+
+summaryqifunchelper <- function(qi) {
+  if (!!sym(qi) == "qi_followreg3m") {
+    tmp <- rsdata %>%
+      filter(
+        indexdtm >= ymd(paste0(global_year - 1, "-07-01 - ")) &
+          indexdtm <= ymd(paste0(global_year, "-07-01"))
+      )
+  } else {
+    tmp <- rsdata %>%
+      filter(
+        indexdtm >= global_startdtm &
+          indexdtm <= global_stopdtm
+      )
+  }
+  tmp <- tmp %>%
+    filter(
+      !is.na(hfdurindex) &
+        ttype == qiinfo %>%
+          filter(qivar == qi) %>%
+          pull(timepoint)
+    )
+
+  tmp <- tmp %>%
+    filter(!is.na(!!sym(qi))) %>%
+    group_by(hfdurindex, .drop = F) %>%
+    count(!!sym(qi), .drop = F) %>%
+    mutate(
+      tot = sum(n),
+      percent = as.numeric(fn(n / tot * 100, 0))
+    ) %>%
+    ungroup() %>%
+    filter(!!sym(qi) == 1) %>%
+    mutate(qivar = qi) %>%
+    select(-!!sym(qi))
+}
+
+stat <- lapply(qiinfo$qivar, summaryqifunchelper)
+
+stat2 <- bind_rows(stat)
+
+stat2 <- stat2 %>%
+  mutate(
+    hfdurindex = replace_na(hfdurindex, levels(stat2$hfdurindex)[2]),
+    cols = case_when(
+      hfdurindex == levels(stat2$hfdurindex)[1] ~ global_colsblue[2],
+      hfdurindex == levels(stat2$hfdurindex)[2] ~ global_colsblue[5]
+    )
+  )
+
+stat2 <- stat2 %>%
+  mutate(
+    ntot = paste0(n, " av ", tot),
+    per = paste0(percent, "%"),
+    per = if_else(tot < 10, "", per),
+    ntot = if_else(tot < 10, "", ntot),
+    percent = if_else(tot < 10, 0, percent),
+    row = 1:n()
+  )
+
+stat2 <- left_join(stat2, qiinfo, by = "qivar")
+
+stat2$qishortname <- forcats::fct_reorder(stat2$qishortname, stat2$row)
+
+cexmy <- 0.9
+# c(bottom, left, top, right)
+par(mar = c(10, 4, 3.7, 0) + 0.1)
+
+
+b <- barplot(stat2$percent,
+  space = c(0, rep(c(0, 1), 14), 0),
+  axes = FALSE,
+  ylab = "Procent",
+  xlab = "",
+  col = stat2$cols,
+  border = "white",
+  # names.arg = rep(NA, nrow(qiinfo)),
+  cex.lab = cexmy,
+  ylim = c(0, 100),
+  las = 2, cex.names = cexmy
+)
+
+axis(2, seq(0, 100, 20), cex.axis = cexmy, las = 2)
+
+bplace <- b[c(seq(1, length(b), 2))]
+
+for (i in seq_along(bplace)) {
+  lines(
+    x = c(bplace[i] - 0.5, bplace[i] + 1.5),
+    y = c(qiinfo$ll[i], qiinfo$ll[i]) * 100, col = global_colslimit[2], lty = 2, lwd = 1
+  )
+  lines(
+    x = c(bplace[i] - 0.5, bplace[i] + 1.5),
+    y = c(qiinfo$ul[i], qiinfo$ul[i]) * 100, col = global_colslimit[1], lty = 2, lwd = 1
+  )
+}
+
+levhf <- levels(stat2$hfdurindex)
+#levhf <- if_else(levhf == "Duration HF > 6 mån vid index", "Duration HF \u2265 6 mån vid index", levhf)
+
+legend("topright", levhf, fill = global_colsblue[c(2, 5)], border = global_colsblue[c(2, 5)], bty = "n", cex = cexmy)
+
+axis(3,
+  at = b,
+  labels = stat2$ntot, line = -1, tick = FALSE, cex.axis = cexmy * 0.8, hadj = 0, gap.axis = -10000000, las = 2
+)
+
+axis(1,
+  at = bplace + 0.5,
+  labels = qiinfo$qishortname, line = -0.5, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 2
+)
+
+axis(1,
+  at = b[5] + (b[6] - b[5]) / 2,
+  labels = "Index", line = 6.1, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 1
+)
+
+axis(1,
+  at = b[22],
+  labels = "Uppföljning 3 månader", line = 6.1, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 1
+)
+
+posarrow <- -47.5
+arrows(b[1], posarrow, b[4], posarrow, xpd = TRUE, code = 1, length = 0.1)
+arrows(b[7], posarrow, b[10], posarrow, xpd = TRUE, code = 2, length = 0.1)
+
+arrows(b[13], posarrow, b[18], posarrow, xpd = TRUE, code = 1, length = 0.1)
+arrows(b[26], posarrow, b[30], posarrow, xpd = TRUE, code = 2, length = 0.1)
+
+legend("bottom",
+  inset = c(-0, -.65), xpd = NA,
+  legend = labnams[2:3],
+  lty = 2,
+  col = global_colslimit,
+  bty = "n",
+  cex = cexmy,
+  horiz = TRUE
+)
+```
+
+\elandscape

@@ -1,0 +1,174 @@
+```{r, cache=cacheon}
+tabvars <- c(
+  "vtype", "sex", "age", "hfdurindex", "ef_cat3", "FUNCTION_CLASS_NYHA", "LIFEQUALITY_SCORE",
+  "EARLIER_CARDIAC_ARREST", "REVASCULARIZATION", "HYPERTENSION",
+  "ATRIAL_FIBRILLATION_FLUTTER", "DIABETES",
+  "CHRONIC_LUNG_DISEASE", "HEART_VALVE_DISEASE",
+  "HEART_VALVE_SURGERY", "DILATED_CARDIOMYOPATHY",
+  "PRIMARY_ETIOLOGY",
+  "BP_SYSTOLIC", "BP_DIASTOLIC", "HEART_FREQUENCY",
+  "B_HB", "S_CREATININE",
+  "S_POTASSIUM", "S_SODIUM",
+  "NT_PROBNP", "S_FERRITIN" , "P_TRANSFERRIN" 
+)
+
+tmprsdata <- rsdata %>%
+  filter(indexyear == global_year)
+```
+
+```{r, cache=cacheon}
+
+tab1 <- print(CreateTableOne(
+  vars = tabvars,
+  data = tmprsdata,
+  strata = "ttype",
+  # includeNA = TRUE,
+  addOverall = FALSE
+),
+missing = FALSE,
+printToggle = FALSE,
+nonnormal = tabvars,
+catDigits = 1,
+contDigits = 1,
+noSpaces = TRUE,
+explain = FALSE,
+test = FALSE,
+showAllLevels = TRUE
+)
+
+tab1 <- as_tibble(cbind(var = rownames(tab1), tab1))
+
+tab1 <- tab1 %>%
+  mutate(
+    var = case_when(
+      var == "n" ~ "Riket",
+      var == "vtype" ~ "Enhetstyp, n (%)",
+      var == "sex" ~ "Kön, n (%)",
+      var == "age" ~ "Ålder (år), median [Q1-Q3]",
+      var == "hfdurindex" ~ "Duration HF vid index (mån), n (%)",
+      var == "ef_cat3" ~ "LVEF (%), n (%)",
+      var == "FUNCTION_CLASS_NYHA" ~ "NYHA, n (%)",
+      var == "LIFEQUALITY_SCORE" ~ "Hälsotillstånd, median [Q1-Q3]",
+      var == "PRIMARY_ETIOLOGY" ~ "Primär etiologi, n (%)",
+      var == "DIABETES" ~ "Diabetes, n (%)",
+      var == "EARLIER_CARDIAC_ARREST" ~ "Tidigare hjärtinfarkt, n (%)",
+      var == "ATRIAL_FIBRILLATION_FLUTTER" ~ "Förmaksflimmer/fladder, n (%)",
+      var == "HYPERTENSION" ~ "Hypertoni, n (%)",
+      var == "DILATED_CARDIOMYOPATHY" ~ "Dilaterad kardiomyopati, n (%)",
+      var == "HEART_VALVE_DISEASE" ~ "Hjärtklaffsjukdom, n (%)",
+      var == "REVASCULARIZATION" ~ "Revaskularisering, n (%)",
+      var == "CHRONIC_LUNG_DISEASE" ~ "Kronisk lungsjukdom, n (%)",
+      var == "HEART_VALVE_SURGERY" ~ "Klaffoperation, n (%)",
+      var == "BP_SYSTOLIC" ~ "BT systoiskt (mmHg), median [Q1-Q3]",
+      var == "BP_DIASTOLIC" ~ "BT diastoliskt (mmHg), median [Q1-Q3]",
+      var == "HEART_FREQUENCY" ~ "Hjärtfrekvens (slag/min), median [Q1-Q3]",
+      var == "NT_PROBNP" ~ "NT-proBNP (pg/m/L), median [Q1-Q3]",
+      var == "S_CREATININE" ~ "S-Kreatinin (umol/L), median [Q1-Q3]",
+      var == "S_POTASSIUM" ~ "P-Kalium (mmol/L), median [Q1-Q3]",
+      var == "S_SODIUM" ~ "S-Natrium (mmol/L), median [Q1-Q3]",
+      var == "B_HB" ~ "B-HB (g/L), median [Q1-Q3]",
+      var == "P_TRANSFERRIN" ~ "P-Transferrin mättnad (%), median [Q1-Q3]",
+      var == "S_FERRITIN" ~ "S-Ferritin (ug/l), median [Q1-Q3]"
+    ),
+    level = str_replace_all(level, fixed("Duration HF "), ""),
+    level = str_replace_all(level, fixed(" mån vid index"), ""), 
+    level = str_replace_all(level, fixed("\u2265"), "$\\geq$")
+  ) %>%
+  mutate(across(everything(), ~ str_replace_all(.x, fixed("0 (NaN)"), ""))) %>%
+  mutate(across(everything(), ~ str_replace_all(.x, fixed("(%)"), "(\\%)")))
+
+## fix in order to use escape = TRUE
+colnames(tab1) <- c(colnames(tab1) <- c("", "", levels(rsdata$ttype)))
+
+write.xlsx(tab1, paste0("./output/tabs/karak_", Sys.Date(), ".xlsx"), rowNames = FALSE, overwrite = T)
+
+default_kable(tab1,
+  font_size = 6,
+  caption = paste0("Karaktäristika för patienter registrerade under ", global_year),
+  escape = FALSE
+)
+```
+
+\blandscape
+
+```{r, cache=cacheon, dependson="tabs"}
+
+tab1 <- print(CreateTableOne(
+  vars = tabvars[tabvars != "sex"],
+  data = tmprsdata,
+  strata = c("sex", "ttype"),
+  # includeNA = TRUE
+),
+missing = FALSE,
+printToggle = FALSE,
+nonnormal = tabvars,
+catDigits = 1,
+contDigits = 1,
+noSpaces = TRUE,
+explain = FALSE,
+test = FALSE,
+showAllLevels = TRUE
+)
+tab1 <- as_tibble(cbind(var = rownames(tab1), tab1))
+
+
+tab1 <- tab1 %>%
+  mutate(
+    var = case_when(
+      var == "n" ~ "Riket",
+      var == "vtype" ~ "Enhetstyp, n (%)",
+      var == "sex" ~ "Kön, n (%)",
+      var == "age" ~ "Ålder (år), median [Q1-Q3]",
+      var == "hfdurindex" ~ "Duration HF vid index (mån), n (%)",
+      var == "ef_cat3" ~ "LVEF (%), n (%)",
+      var == "FUNCTION_CLASS_NYHA" ~ "NYHA, n (%)",
+      var == "LIFEQUALITY_SCORE" ~ "Hälsotillstånd, median [Q1-Q3]",
+      var == "PRIMARY_ETIOLOGY" ~ "Primär etiologi, n (%)",
+      var == "DIABETES" ~ "Diabetes, n (%)",
+      var == "EARLIER_CARDIAC_ARREST" ~ "Tidigare hjärtinfarkt, n (%)",
+      var == "ATRIAL_FIBRILLATION_FLUTTER" ~ "Förmaksflimmer/fladder, n (%)",
+      var == "HYPERTENSION" ~ "Hypertoni, n (%)",
+      var == "DILATED_CARDIOMYOPATHY" ~ "Dilaterad kardiomyopati, n (%)",
+      var == "HEART_VALVE_DISEASE" ~ "Hjärtklaffsjukdom, n (%)",
+      var == "REVASCULARIZATION" ~ "Revaskularisering, n (%)",
+      var == "CHRONIC_LUNG_DISEASE" ~ "Kronisk lungsjukdom, n (%)",
+      var == "HEART_VALVE_SURGERY" ~ "Klaffoperation, n (%)",
+      var == "BP_SYSTOLIC" ~ "BT systoiskt (mmHg), median [Q1-Q3]",
+      var == "BP_DIASTOLIC" ~ "BT diastoliskt (mmHg), median [Q1-Q3]",
+      var == "HEART_FREQUENCY" ~ "Hjärtfrekvens (slag/min), median [Q1-Q3]",
+      var == "NT_PROBNP" ~ "NT-proBNP (pg/m/L), median [Q1-Q3]",
+      var == "S_CREATININE" ~ "S-Kreatinin (umol/L), median [Q1-Q3]",
+      var == "S_POTASSIUM" ~ "P-Kalium (mmol/L), median [Q1-Q3]",
+      var == "S_SODIUM" ~ "S-Natrium (mmol/L), median [Q1-Q3]",
+      var == "B_HB" ~ "B-HB (g/L), median [Q1-Q3]",
+      var == "P_TRANSFERRIN" ~ "P-Transferrin mättnad (%), median [Q1-Q3]",
+      var == "S_FERRITIN" ~ "S-Ferritin (ug/l), median [Q1-Q3]"
+    ),
+    level = str_replace_all(level, fixed("Duration HF "), ""),
+    level = str_replace_all(level, fixed(" mån vid index"), ""), 
+    level = str_replace_all(level, fixed("\u2265"), "$\\geq$")
+  ) %>%
+  mutate(across(everything(), ~ str_replace_all(.x, fixed("0 (NaN)"), ""))) %>%
+  mutate(across(everything(), ~ str_replace_all(.x, fixed("(%)"), "(\\%)")))
+
+## fix in order to use escape = TRUE
+colnames(tab1) <- c("", "", rep(levels(rsdata$sex), 4))
+
+write.xlsx(tab1, paste0("./output/tabs/karak_kon_", Sys.Date(), ".xlsx"), rowNames = FALSE, overwrite = T)
+
+myHeader <- c(" " = 2, " " = 2, " " = 2, " " = 2, " " = 2)
+names(myHeader) <- c(
+  " ", shortttype[1],
+  paste0("Uppföljning ", shortttype[2]),
+  paste0("Uppföljning ", shortttype[3]),
+  paste0("Uppföljning ", shortttype[4])
+)
+
+default_kable(tab1,
+  font_size = 6,
+  caption = paste0("Karaktäristika för patienter registrerade under ", global_year, " uppdelat på kön"),
+  escape = FALSE
+) %>% add_header_above(myHeader)
+```
+
+\elandscape
