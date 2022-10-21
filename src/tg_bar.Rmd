@@ -1,4 +1,4 @@
-```{r, cache=cacheon}
+```{r tgbar, fig.cap=paste0("Covarage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 tgfunc <- function(tgtype) {
   empty <- tibble(
@@ -8,11 +8,11 @@ tgfunc <- function(tgtype) {
   )
 
   unitdata <- tg_lan %>%
-    filter(region != "Riket") %>%
+    filter(region != "Sweden") %>%
     arrange(desc(!!sym(paste0("p", tgtype))), region)
 
   all <- bind_rows(
-    tg_lan %>% filter(region == "Riket"),
+    tg_lan %>% filter(region == "Sweden"),
     empty,
     unitdata
   )
@@ -20,9 +20,9 @@ tgfunc <- function(tgtype) {
   all <- all %>%
     mutate(
       cols = case_when(
-        region == "Riket" ~ global_colsblue[5],
+        region == "Sweden" ~ global_cols[1],
         region == "" ~ "white",
-        TRUE ~ global_colsblue[2],
+        TRUE ~ global_cols[2],
       ),
       row = 1:n()
     ) %>%
@@ -34,7 +34,13 @@ tgfunc <- function(tgtype) {
       region = factor(region, levels = rev(levels(all$region))),
       percent = !!sym(paste0("p", tgtype)),
       per = if_else(region != "", paste0(fn(percent, dig = 0), "%"), ""),
-      ntot = if_else(region != "", paste0(!!sym(paste0("n", tgtype)), " av ", !!sym(paste0("tot", tgtype))), "")
+      ntot = if_else(region != "",
+        paste0(
+          fnbm(!!sym(paste0("n", tgtype))),
+          " of ",
+          fnbm(!!sym(paste0("tot", tgtype)))
+        ), ""
+      )
     )
 
   cexmy <- .75
@@ -45,7 +51,7 @@ tgfunc <- function(tgtype) {
     data = all,
     horiz = TRUE,
     axes = FALSE,
-    xlab = "Procent",
+    xlab = "Percent",
     ylab = "",
     xaxs = "i", yaxs = "i",
     col = all$cols,
@@ -62,14 +68,11 @@ tgfunc <- function(tgtype) {
 
   axis(2, at = b, labels = all$per, line = -19, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
 
-  axis(2, at = b, labels = all$ntot, line = 1.5, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
+  axis(2, at = b, labels = all$ntot, line = 1.6, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
 
   # mtext("n/N", side = 2, line = 1, at = last(b) + diff(tail(b, 2)), adj = 0.5, cex = cexmy, las = 2)
-  axis(1, at = 50, cex.axis = cexmy, labels = "Procent", line = 1, tick = FALSE, hadj = .5)
+  axis(1, at = 50, cex.axis = cexmy, labels = "Percent", line = 1, tick = FALSE, hadj = .5)
 }
-```
-
-```{r tgbar, fig.cap=paste0("Täckningsgrad ", global_year, " (prevalent) och ", global_year -1, " (incident) uppdelat på region"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 tgfunc(tgtype = "prev")
 tgfunc("inc")

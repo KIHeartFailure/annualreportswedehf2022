@@ -21,11 +21,11 @@ barsummary <- function(qi = qitmp,
   all <- all %>%
     mutate(
       cols = case_when(
-        indexyear == starttime ~ global_colsblue[3],
-        indexyear == starttime + 1 ~ global_colsblue[4],
-        TRUE ~ global_colsblue[5]
+        indexyear == starttime ~ global_cols[1],
+        indexyear == starttime + 1 ~ global_cols[2],
+        TRUE ~ global_cols[3]
       ),
-      ntot = paste0(n, " av ", tot),
+      ntot = paste0(fnbm(n), " of ", fnbm(tot)),
       per = paste0(percent, "%"),
       per = if_else(tot < 10, "", per),
       ntot = if_else(tot < 10, "", ntot),
@@ -36,13 +36,13 @@ barsummary <- function(qi = qitmp,
 
   cexmy <- .9
   # c(bottom, left, top, right)
-  par(mar = c(5, 4, 5, 0) + 0.1)
+  par(mar = c(5, 4, 5.2, 0) + 0.1)
 
   b <- barplot(percent ~ indexyear + ttype,
     data = all,
     beside = TRUE,
     axes = FALSE,
-    ylab = "Procent",
+    ylab = "Percent",
     xlab = "",
     col = all$cols,
     border = "white",

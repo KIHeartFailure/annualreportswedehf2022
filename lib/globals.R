@@ -5,20 +5,29 @@ filter <- dplyr::filter
 mutate <- dplyr::mutate
 complete <- tidyr::complete
 
-global_colsblue <- c(
-"#9BC7E5",
-"#6FAFDA", 
-"#5296D1", 
-"#1358BA", 
-"#0F36A3", 
-"#002282", 
-"#001B66", 
-"#021447"
+global_cols <- c(
+  "#213067",
+  "#bb7cb3",
+  "#e6007e",
+  "#009fe3",
+  "#33ac5a",
+  "#95368c",
+  "#878787",
+  "#f29ec4",
+  "#f7a600",
+  "#a1daf8",
+  "#89c58b",
+  "#e6007e",
+  "#854f46",
+  "#9d9c9c",
+  "#fdcb78",
+  "#10bbef",
+  "#ac8579"
 )
 
-global_colsgreymiss <- "#C2C2C2"
+global_colsgreymiss <- "#9d9c9c"
 
-global_colslimit <- c("#32a543", "#fdb823")
+global_colslimit <- c("#33ac5a", "#f7a600")
 
 # year of report
 

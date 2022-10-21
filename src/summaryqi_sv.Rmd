@@ -1,7 +1,7 @@
 
 \blandscape
 
-```{r allki, cache=cacheon, fig.cap=paste0("Sweden, all ", nrow(qiinfo), " quality indicators ",  global_year), fig.width=9, fig.height=6}
+```{r allkisv, cache=cacheon, fig.cap=paste0("Riket, alla ", nrow(qiinfosv), " kvalitetsindikatorer ",  global_year), fig.width=9, fig.height=6}
 
 summaryqifunchelper <- function(qi) {
   if (!!sym(qi) == "qi_followreg3m") {
@@ -20,7 +20,7 @@ summaryqifunchelper <- function(qi) {
   tmp <- tmp %>%
     filter(
       !is.na(hfdurindex) &
-        ttype == qiinfo %>%
+        ttype == qiinfosv %>%
           filter(qivar == qi) %>%
           pull(timepoint)
     )
@@ -39,7 +39,7 @@ summaryqifunchelper <- function(qi) {
     select(-!!sym(qi))
 }
 
-stat <- lapply(qiinfo$qivar, summaryqifunchelper)
+stat <- lapply(qiinfosv$qivar, summaryqifunchelper)
 
 stat2 <- bind_rows(stat)
 
@@ -54,7 +54,7 @@ stat2 <- stat2 %>%
 
 stat2 <- stat2 %>%
   mutate(
-    ntot = paste0(fnbm(n), " of ", fnbm(tot)),
+    ntot = paste0(n, " av ", tot),
     per = paste0(percent, "%"),
     per = if_else(tot < 10, "", per),
     ntot = if_else(tot < 10, "", ntot),
@@ -62,23 +62,23 @@ stat2 <- stat2 %>%
     row = 1:n()
   )
 
-stat2 <- left_join(stat2, qiinfo, by = "qivar")
+stat2 <- left_join(stat2, qiinfosv, by = "qivar")
 
 stat2$qishortname <- forcats::fct_reorder(stat2$qishortname, stat2$row)
 
 cexmy <- 0.9
 # c(bottom, left, top, right)
-par(mar = c(10, 4, 3.9, 0) + 0.1)
+par(mar = c(10, 4, 3.7, 0) + 0.1)
 
 
 b <- barplot(stat2$percent,
   space = c(0, rep(c(0, 1), 14), 0),
   axes = FALSE,
-  ylab = "Percent",
+  ylab = "Procent",
   xlab = "",
   col = stat2$cols,
   border = "white",
-  # names.arg = rep(NA, nrow(qiinfo)),
+  # names.arg = rep(NA, nrow(qiinfosv)),
   cex.lab = cexmy,
   ylim = c(0, 100),
   las = 2, cex.names = cexmy
@@ -91,16 +91,16 @@ bplace <- b[c(seq(1, length(b), 2))]
 for (i in seq_along(bplace)) {
   lines(
     x = c(bplace[i] - 0.5, bplace[i] + 1.5),
-    y = c(qiinfo$ll[i], qiinfo$ll[i]) * 100, col = global_colslimit[2], lty = 2, lwd = 1
+    y = c(qiinfosv$ll[i], qiinfosv$ll[i]) * 100, col = global_colslimit[2], lty = 2, lwd = 1
   )
   lines(
     x = c(bplace[i] - 0.5, bplace[i] + 1.5),
-    y = c(qiinfo$ul[i], qiinfo$ul[i]) * 100, col = global_colslimit[1], lty = 2, lwd = 1
+    y = c(qiinfosv$ul[i], qiinfosv$ul[i]) * 100, col = global_colslimit[1], lty = 2, lwd = 1
   )
 }
 
 levhf <- levels(stat2$hfdurindex)
-#levhf <- if_else(levhf == "Duration HF > 6 mån vid index", "Duration HF \u2265 6 mån vid index", levhf)
+levhf <- str_replace(levhf, "mo at index", "mån vid index")
 
 legend("topright", levhf, fill = global_cols[c(1, 2)], border = global_cols[c(1, 2)], bty = "n", cex = cexmy)
 
@@ -111,7 +111,7 @@ axis(3,
 
 axis(1,
   at = bplace + 0.5,
-  labels = qiinfo$qishortname, line = -0.5, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 2
+  labels = qiinfosv$qishortname, line = -0.5, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 2
 )
 
 axis(1,
@@ -121,7 +121,7 @@ axis(1,
 
 axis(1,
   at = b[22],
-  labels = "3 month follow-up", line = 6.1, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 1
+  labels = "Uppföljning 3 månader", line = 6.1, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 1
 )
 
 posarrow <- -47.5
@@ -133,7 +133,7 @@ arrows(b[26], posarrow, b[30], posarrow, xpd = TRUE, code = 2, length = 0.1)
 
 legend("bottom",
   inset = c(-0, -.65), xpd = NA,
-  legend = labnams[2:3],
+  legend = labnamssv[2:3],
   lty = 2,
   col = global_colslimit,
   bty = "n",

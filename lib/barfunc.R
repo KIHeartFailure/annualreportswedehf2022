@@ -1,10 +1,14 @@
 barfunc <- function(var, startime = global_startdtm, stoptime = global_stopdtm, type = "Index",
-                    data = rsdata, mycols) {
+                    data = rsdata) {
   tmp <- data %>%
     filter(ttype %in% type &
       indexdtm >= startime &
       indexdtm <= stoptime &
       !is.na(!!sym(var)))
+
+  levs <- levels(tmp %>% pull(!!sym(var)))
+  mycols <- global_cols[1:length(levs)]
+  mycols[levs == "Unknown"] <- global_colsgreymiss
 
   # per region
   unitdata <- tmp %>%
@@ -39,9 +43,9 @@ barfunc <- function(var, startime = global_startdtm, stoptime = global_stopdtm, 
   ntot <- unitdata %>%
     group_by(unit) %>%
     arrange(var) %>%
-    summarize(ntot = paste0(n, collapse = "/")) %>%
+    summarize(ntot = paste0(fnbm(n), collapse = "/")) %>%
     ungroup() %>%
-    mutate(ntot = paste0(ntot, " av ", unitdata %>% group_by(unit) %>% slice(1) %>% ungroup() %>% pull(tot)))
+    mutate(ntot = paste0(ntot, " of ", fnbm(unitdata %>% group_by(unit) %>% slice(1) %>% ungroup() %>% pull(tot))))
 
   cexmy <- .75
   # c(bottom, left, top, right)
@@ -72,7 +76,7 @@ barfunc <- function(var, startime = global_startdtm, stoptime = global_stopdtm, 
 
   axis(2, at = b, labels = percent$percent, line = -22.3, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
 
-  axis(1, at = 50, cex.axis = cexmy, labels = "Procent", line = 1, tick = FALSE, hadj = .5)
+  axis(1, at = 50, cex.axis = cexmy, labels = "Percent", line = 1, tick = FALSE, hadj = .5)
 
   legend("bottom",
     inset = c(-0, -.14), xpd = NA,

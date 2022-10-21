@@ -19,8 +19,8 @@ rsdata <- rsdata %>%
     levels = 1:4, labels = c("<65", "65-74", "75-84", "\u226585")
     ),
     sex = factor(case_when(
-      SEX == "FEMALE" ~ "Kvinnna",
-      SEX == "MALE" ~ "Man"
+      SEX == "FEMALE" ~ "Female",
+      SEX == "MALE" ~ "Male"
     )),
     PRIMARY_ETIOLOGY = factor(case_when(
       PRIMARY_ETIOLOGY == "ALCOHOL" ~ 4,
@@ -30,8 +30,8 @@ rsdata <- rsdata %>%
       PRIMARY_ETIOLOGY == "ISCHEMIC" ~ 2,
       PRIMARY_ETIOLOGY == "OTHER" ~ 6,
     ), levels = 1:6, labels = c(
-      "Hypertoni", "Ischemisk hjärtsjukdom", "Dilaterad kardiomyopati",
-      "Känd alkohol kardiomyopati", "Klaffsjukdom", "Annat"
+      "Hypertension", "ischemic heart disease", "Dilated cardiomyopathy",
+      "Known alcoholic cardiomyopathy", "Heart valve disease", "Other"
     )),
     REVASCULARIZATION = factor(case_when(
       REVASCULARIZATION == "CABG" ~ 2,
@@ -39,14 +39,14 @@ rsdata <- rsdata %>%
       REVASCULARIZATION == "NO" ~ 1,
       REVASCULARIZATION == "PCI" ~ 3
     ),
-    levels = 1:4, labels = c("Nej", "CABG", "PCI", "CABG+PCI")
+    levels = 1:4, labels = c("No", "CABG", "PCI", "CABG+PCI")
     ),
     DIABETES = factor(case_when(
       DIABETES == "NO" ~ 1,
       DIABETES == "TYPE_1" ~ 2,
       DIABETES == "TYPE_2" ~ 3
     ),
-    levels = 1:3, labels = c("Nej", "Typ 1", "Typ 2")
+    levels = 1:3, labels = c("No", "Type 1", "Type 2")
     ),
     HEART_VALVE_SURGERY = factor(case_when(
       HEART_VALVE_SURGERY == "AORTA" ~ 2,
@@ -55,7 +55,7 @@ rsdata <- rsdata %>%
       HEART_VALVE_SURGERY == "NO" ~ 1,
       HEART_VALVE_SURGERY == "OTHER" ~ 5
     ),
-    levels = 1:5, labels = c("Nej", "Aorta", "Mitralis", "Aorta + Mitralis", "Annat")
+    levels = 1:5, labels = c("No", "Aorta", "Mitralis", "Aorta + Mitralis", "Other")
     ),
     tmp_timedurationhf = indexdtm - DATE_FOR_DIAGNOSIS_HF,
     tmp_timedurationhf2 = case_when(
@@ -66,7 +66,7 @@ rsdata <- rsdata %>%
     hfdur = factor(case_when(
       hfdur == "LESS_THAN_6_MONTHS" ~ 1,
       hfdur == "MORE_THAN_6_MONTHS" ~ 2
-    ), levels = 1:2, labels = c("Duration HF < 6 mån vid index", "Duration HF \u2265 6 mån vid index")),
+    ), levels = 1:2, labels = c("HF duration < 6 mo at index", "HF duration \u2265 6 mo at index")),
     ef_cat = factor(case_when(
       LVEF_SEMIQUANTITATIVE == "NORMAL" | LVEF_PERCENT >= 50 ~ 1,
       LVEF_SEMIQUANTITATIVE == "MILD" | LVEF_PERCENT >= 40 ~ 1,
@@ -85,10 +85,10 @@ rsdata <- rsdata %>%
     ), labels = c(">=40/>35", "<40/<=35"), levels = 1:2),
     FUNCTION_CLASS_NYHA = str_replace(FUNCTION_CLASS_NYHA, "NYHA_", " "),
     location = factor(case_when(
-      vtype == "Primärvård" ~ 3,
-      PROCESS_DEFINITION_REFERENCE %in% c("IX_OV", "FO", "YFO") & vtype == "Sjukhus" ~ 2,
+      vtype == "Primary care" ~ 3,
+      PROCESS_DEFINITION_REFERENCE %in% c("IX_OV", "FO", "YFO") & vtype == "Hospital" ~ 2,
       PROCESS_DEFINITION_REFERENCE %in% c("IX_SV") ~ 1
-    ), levels = 1:3, labels = c("Slutenvård", "Öppenvård sjukhus", "Primärvård")), 
+    ), levels = 1:3, labels = c("In-hospital", "Out-patient hosptial", "Primary care")), 
     ferrtrans_available = if_else(!is.na(P_TRANSFERRIN) & !is.na(S_FERRITIN), 1, 0)
   )
 
@@ -102,7 +102,7 @@ yn_func <- function(var) {
   var <- factor(case_when(
     var == "NO" ~ 0,
     var == "YES" ~ 1
-  ), levels = 0:1, labels = c("Nej", "Ja"))
+  ), levels = 0:1, labels = c("No", "Yes"))
 }
 
 rsdata <- rsdata %>%
@@ -157,9 +157,12 @@ rsdata <- left_join(
     ttype = if_else(diff_timeadmission >= 1.5 * 365 & TYPE == "YEARLY_FOLLOWUP", 4, ttype),
     ttype = factor(ttype,
       levels = 1:4,
-      labels = c("Index", "Uppföljning 3 månader", "Uppföljning 1 år", "Uppföljning 2+ år")
+      labels = c("Index", "3 month follow-up", "1 year follow-up", "2+ year follow-up")
     )
   )
+
+rsdata <- rsdata %>% 
+  mutate(across(where(is.character), as.factor))
 
 # check dups --------------------------------------------------------------
 
@@ -168,3 +171,8 @@ koll2 <- rsdata %>%
   slice(2) %>%
   ungroup() %>%
   count(indexyear, ttype)
+
+# För att få data till test 2022
+
+#rsdata <- rsdata %>%
+#  mutate(indexyear = factor(if_else(indexyear == "2014", "2022", as.character(indexyear))))

@@ -1,5 +1,5 @@
-timefunc <- function(qi = qitmp, starttime = global_year - 4, stoptime = global_year, ll = lltmp, ul = ultmp,
-                     data = rsdata, ylimmin = c(0, 100), onlyindex = FALSE, adjtext = NULL) {
+timefunc <- function(qi = qitmp, starttime = global_year - 5, stoptime = global_year, ll = lltmp, ul = ultmp,
+                     data = rsdata, ylimmin = c(0, 100), onlyindex = FALSE, legplace = NULL) {
   tmp <- data %>%
     filter(indexyear %in% paste(seq(starttime, stoptime, 1)) &
       !is.na(!!sym(qi)))
@@ -9,11 +9,13 @@ timefunc <- function(qi = qitmp, starttime = global_year - 4, stoptime = global_
       filter(ttype == "Index")
 
     byvar <- "vtype"
-    colsmy <- global_colsblue[c(5, 2)]
+    colsmy <- global_cols[1:2]
+    if (is.null(legplace)) legplace <- c(1, 20)
   }
   if (!onlyindex) {
     byvar <- "ttype"
-    colsmy <- global_colsblue[c(6, 5, 4, 3)]
+    colsmy <- global_cols[1:4]
+    if (is.null(legplace)) legplace <- c(1, 30)
   }
 
   datafig <- tmp %>%
@@ -35,9 +37,14 @@ timefunc <- function(qi = qitmp, starttime = global_year - 4, stoptime = global_
     select(-indexyear) %>%
     as.matrix()
 
-  cexmy <- 1
+  if (!all(ylimmin == c(0, 100))) {
+    if (ylimmin[1] != 0) ylimmin[1] <- ylimmin[1] - 5
+    if (ylimmin[2] != 100) ylimmin[2] <- ylimmin[2] + 5
+  }
+
+  cexmy <- 1.2
   # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
-  par(mar = c(5.5, 4, .5, 10) + 0.1, xpd = FALSE)
+  par(mar = c(5.9, 4, 0.5, 0.5) + 0.1, xpd = FALSE)
 
   matplot(datafig,
     type = "b",
@@ -51,7 +58,7 @@ timefunc <- function(qi = qitmp, starttime = global_year - 4, stoptime = global_
     yaxs = "i",
     ylim = ylimmin,
     xlim = c(1 - 0.1, stoptime - starttime + 1 + 0.1),
-    ylab = "Procent",
+    ylab = "Percent",
     xlab = labnams[1],
     cex.lab = cexmy
   )
@@ -64,34 +71,38 @@ timefunc <- function(qi = qitmp, starttime = global_year - 4, stoptime = global_
     int <- 10
   }
 
-  axis(2, seq(ylimmin[1], ylimmin[2], int), cex.axis = cexmy, las = 2)
+  if (!all(ylimmin == c(0, 100))) {
+    if (ylimmin[1] != 0) {
+      axis(2, c(ylimmin[1], seq(ylimmin[1] + 5, (ylimmin[2]), int)),
+        c(0, seq(ylimmin[1] + 5, ylimmin[2], int)),
+        cex.axis = cexmy, las = 2
+      )
+      plotrix::axis.break(2, ylimmin[1] + 2.5, style = "slash")
+    }
+    if (ylimmin[2] != 100) {
+      axis(2, c(seq(ylimmin[1], ylimmin[2] - 5, int), ylimmin[2]),
+        c(seq(ylimmin[1], ylimmin[2], int), 100),
+        cex.axis = cexmy, las = 2
+      )
+      plotrix::axis.break(2, ylimmin[2] - 2.5, style = "slash")
+    }
+  } else {
+    axis(2, seq(ylimmin[1], ylimmin[2], int), cex.axis = cexmy, las = 2)
+  }
 
   abline(h = ll * 100, col = global_colslimit[2], lty = 2, lwd = 1)
   abline(h = ul * 100, col = global_colslimit[1], lty = 2, lwd = 1)
 
   axis(1, at = 1:(stoptime - starttime + 1), labels = starttime:stoptime, cex.axis = cexmy)
 
-  if (is.null(adjtext)) {
-    adjtext <- rep(0, length(colnames(datafig)))
-  }
-  axis(2,
-    at = datafig[stoptime - starttime + 1, ] + adjtext, labels = str_replace(colnames(datafig), "_", " "),
-    line = -32.2,
-    tick = FALSE, cex.axis = cexmy,
-    las = 2,
-    hadj = 0,
-    gap.axis = -10000000
+  legend(
+    x = legplace[1], y = legplace[2], legend = str_replace(colnames(datafig), "_", " "),
+    bty = "n", col = colsmy, lwd = 3, pch = 19, cex = cexmy
   )
-
-  if (ylimmin[1] != 0) {
-    par(xpd = NA)
-    lines(x = c(0.8, 1), y = c(ylimmin[1], ylimmin[1] + 0.5))
-    lines(x = c(0.8, 1), y = c(ylimmin[1] + 0.5, ylimmin[1] + 1))
-  }
 
   if (!is.null(ll)) {
     legend("bottom",
-      inset = c(-0, -0.21), xpd = NA,
+      inset = c(-0, -0.23), xpd = NA,
       legend = labnams[2:3],
       lty = 2,
       col = global_colslimit,

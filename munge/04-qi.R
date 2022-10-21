@@ -80,7 +80,7 @@ rsdata <- rsdata %>%
 # uppföljningar 3 mån
 
 follow <- rsdata %>%
-  filter(ttype == "Uppföljning 3 månader") %>%
+  filter(ttype == "3 month follow-up") %>%
   mutate(followup = 1) %>%
   select(patientreference, followup)
 
@@ -117,35 +117,35 @@ qiinfo <- qiinfo %>%
       qivar == "qi_lvef" ~ "LVEF",
       qivar == "qi_ntprobnp" ~ "NT-proBNP",
       qivar == "qi_nyha" ~ "NYHA",
-      qivar == "qi_qol" ~ "Hälsotillstånd",
-      qivar == "qi_uppfhf" ~ "HF-mottagning",
+      qivar == "qi_qol" ~ "QoL EQ-5D",
+      qivar == "qi_uppfhf" ~ "HF clinic",
       qivar == "qi_ras" ~ "ACEI/ARB/ARNI",
-      qivar == "qi_arni" ~ "Andel ARNI",
-      qivar == "qi_bbl" ~ "Betablockad",
+      qivar == "qi_arni" ~ "Proportion ARNI",
+      qivar == "qi_bbl" ~ "Beta-blockers",
       qivar == "qi_mra" ~ "MRA",
-      qivar == "qi_trippel" ~ "Trippelbehandling",
-      qivar == "qi_sglt2" ~ "SGLT-2 hämmare",
+      qivar == "qi_trippel" ~ "Triple therapy",
+      qivar == "qi_sglt2" ~ "SGLT2i",
       qivar == "qi_crt" ~ "CRT",
       qivar == "qi_icd" ~ "ICD",
-      qivar == "qi_fys" ~ "Fysisk träning",
-      qivar == "qi_followreg3m" ~ "Uppföljning 3 månader"
+      qivar == "qi_fys" ~ "Physical exercise",
+      qivar == "qi_followreg3m" ~ "3 month follow-up"
     ),
     qiname = case_when(
-      qivar == "qi_lvef" ~ "LVEF, Vänsterkammarfunktion rapporterat vid index",
-      qivar == "qi_ntprobnp" ~ "NT-proBNP rapporterat vid index",
-      qivar == "qi_nyha" ~ "NYHA klass rapporterat vid index",
-      qivar == "qi_qol" ~ "Hälsotillstånd rapporterat vid index",
-      qivar == "qi_uppfhf" ~ "Planerad uppföljning vid hjärtsviktsmottagning",
+      qivar == "qi_lvef" ~ "LVEF recorded at index",
+      qivar == "qi_ntprobnp" ~ "NT-proBNP recorded at index",
+      qivar == "qi_nyha" ~ "NYHA class recorded at index",
+      qivar == "qi_qol" ~ "QoL EQ-5D recorded at index",
+      qivar == "qi_uppfhf" ~ "Planned follow-up at HF clinic",
       qivar == "qi_ras" ~ "ACEI/ARB/ARNI",
-      qivar == "qi_arni" ~ "Andel ARNI av ACEI/ARB/ARNI",
-      qivar == "qi_bbl" ~ "Betablockad",
+      qivar == "qi_arni" ~ "Proportion ARNI of ACEI/ARB/ARNI",
+      qivar == "qi_bbl" ~ "Beta-blockers",
       qivar == "qi_mra" ~ "MRA",
-      qivar == "qi_trippel" ~ "Trippelbehandling",
-      qivar == "qi_sglt2" ~ "SGLT-2 hämmare",
+      qivar == "qi_trippel" ~ "Triple therapy",
+      qivar == "qi_sglt2" ~ "SGLT2i",
       qivar == "qi_crt" ~ "CRT",
       qivar == "qi_icd" ~ "ICD",
-      qivar == "qi_fys" ~ "Fysisk träning",
-      qivar == "qi_followreg3m" ~ "Uppföljningsbesök vid 3 månader rapporterat"
+      qivar == "qi_fys" ~ "Physical exercise",
+      qivar == "qi_followreg3m" ~ "Follow-up visit at 3 months recorded"
     ),
     ll = case_when(
       qivar == "qi_lvef" ~ 0.8,
@@ -187,15 +187,15 @@ qiinfo <- qiinfo %>%
       qivar == "qi_nyha" ~ "Index",
       qivar == "qi_qol" ~ "Index",
       qivar == "qi_uppfhf" ~ "Index",
-      qivar == "qi_ras" ~ "Uppföljning 3 månader",
-      qivar == "qi_arni" ~ "Uppföljning 3 månader",
-      qivar == "qi_bbl" ~ "Uppföljning 3 månader",
-      qivar == "qi_mra" ~ "Uppföljning 3 månader",
-      qivar == "qi_trippel" ~ "Uppföljning 3 månader",
-      qivar == "qi_sglt2" ~ "Uppföljning 3 månader",
-      qivar == "qi_crt" ~ "Uppföljning 3 månader",
-      qivar == "qi_icd" ~ "Uppföljning 3 månader",
-      qivar == "qi_fys" ~ "Uppföljning 3 månader",
+      qivar == "qi_ras" ~ "3 month follow-up",
+      qivar == "qi_arni" ~ "3 month follow-up",
+      qivar == "qi_bbl" ~ "3 month follow-up",
+      qivar == "qi_mra" ~ "3 month follow-up",
+      qivar == "qi_trippel" ~ "3 month follow-up",
+      qivar == "qi_sglt2" ~ "3 month follow-up",
+      qivar == "qi_crt" ~ "3 month follow-up",
+      qivar == "qi_icd" ~ "3 month follow-up",
+      qivar == "qi_fys" ~ "3 month follow-up",
       qivar == "qi_followreg3m" ~ "Index"
     ),
     qino = case_when(
@@ -214,6 +214,45 @@ qiinfo <- qiinfo %>%
       qivar == "qi_icd" ~ 14,
       qivar == "qi_fys" ~ 15,
       qivar == "qi_followreg3m" ~ 6
+    )
+  ) %>%
+  arrange(qino)
+
+qiinfosv <- qiinfo %>%
+  mutate(
+    qishortname = case_when(
+      qivar == "qi_lvef" ~ "LVEF",
+      qivar == "qi_ntprobnp" ~ "NT-proBNP",
+      qivar == "qi_nyha" ~ "NYHA",
+      qivar == "qi_qol" ~ "Hälsotillstånd",
+      qivar == "qi_uppfhf" ~ "HF-mottagning",
+      qivar == "qi_ras" ~ "ACEI/ARB/ARNI",
+      qivar == "qi_arni" ~ "Andel ARNI",
+      qivar == "qi_bbl" ~ "Betablockad",
+      qivar == "qi_mra" ~ "MRA",
+      qivar == "qi_trippel" ~ "Trippelbehandling",
+      qivar == "qi_sglt2" ~ "SGLT-2 hämmare",
+      qivar == "qi_crt" ~ "CRT",
+      qivar == "qi_icd" ~ "ICD",
+      qivar == "qi_fys" ~ "Fysisk träning",
+      qivar == "qi_followreg3m" ~ "Uppföljning 3 månader"
+    ),
+    qiname = case_when(
+      qivar == "qi_lvef" ~ "LVEF, Vänsterkammarfunktion rapporterat vid index",
+      qivar == "qi_ntprobnp" ~ "NT-proBNP rapporterat vid index",
+      qivar == "qi_nyha" ~ "NYHA klass rapporterat vid index",
+      qivar == "qi_qol" ~ "Hälsotillstånd rapporterat vid index",
+      qivar == "qi_uppfhf" ~ "Planerad uppföljning vid hjärtsviktsmottagning",
+      qivar == "qi_ras" ~ "ACEI/ARB/ARNI",
+      qivar == "qi_arni" ~ "Andel ARNI av ACEI/ARB/ARNI",
+      qivar == "qi_bbl" ~ "Betablockad",
+      qivar == "qi_mra" ~ "MRA",
+      qivar == "qi_trippel" ~ "Trippelbehandling",
+      qivar == "qi_sglt2" ~ "SGLT-2 hämmare",
+      qivar == "qi_crt" ~ "CRT",
+      qivar == "qi_icd" ~ "ICD",
+      qivar == "qi_fys" ~ "Fysisk träning",
+      qivar == "qi_followreg3m" ~ "Uppföljningsbesök vid 3 månader rapporterat"
     )
   ) %>%
   arrange(qino)

@@ -25,7 +25,7 @@ tg_lan <- full_join(
   mutate(
     region = str_sub(X1, 4),
     region = case_when(
-      region == "ET" ~ "Riket",
+      region == "ET" ~ "Sweden",
       region == "Södermanland" ~ "Sörmland",
       region == "Jämtland" ~ "Jämtland Härjedalen",
       TRUE ~ region
@@ -49,3 +49,7 @@ tmp_prev <- prevtime %>%
   rename(prev = V1)
 
 tg_overtime <- full_join(tmp_inc, tmp_prev, by = "ar")
+
+# fix for 2022
+#tg_overtime <- bind_rows(tg_overtime, c(ar = "2022", inc = NA, prev = 35)) %>%
+#  mutate(inc = if_else(ar == "2021", as.character(15), inc))

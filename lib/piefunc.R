@@ -1,6 +1,6 @@
 piefunc <- function(var, type = "Index",
                     startime = global_startdtm, stoptime = global_stopdtm,
-                    data = rsdata, mycols) {
+                    data = rsdata) {
   tmp <- data %>%
     filter(
       indexdtm >= startime &
@@ -9,7 +9,10 @@ piefunc <- function(var, type = "Index",
     )
 
   levels(tmp[[var]]) <- c(levels(tmp[[var]]), labnams[4])
-
+  levs <- levels(tmp[[var]])
+  mycols <- global_cols[1:length(levs)]
+  mycols[levs == "Unknown"] <- global_colsgreymiss
+  
   riket <- tmp %>%
     count(!!sym(var)) %>%
     mutate(

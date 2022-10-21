@@ -1,15 +1,15 @@
-```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Täckningsgrad 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
+```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Covarage 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
 
 cexmy <- 0.7
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
-par(mar = c(4, 4, 0.5, 6) + 0.1)
+par(mar = c(4, 4, 0.5, 0.5) + 0.1)
 
 plot(tg_overtime$ar,
   tg_overtime$inc,
   type = "b",
   # type = "l",
   pch = 19,
-  col = global_colsblue[2],
+  col = global_cols[2],
   lty = 1,
   lwd = 3,
   # cex = 1.2,
@@ -17,16 +17,16 @@ plot(tg_overtime$ar,
   xaxs = "i",
   yaxs = "i",
   xlim = c(2003 - 0.3, global_year + 0.3),
-  ylab = "Täckningsgrad (%)",
+  ylab = "Covarage (%)",
   xlab = labnams[1],
   cex.lab = cexmy,
-  ylim = c(0, 40)
+  ylim = c(0, 45)
 )
 matplot(tg_overtime$ar,
   tg_overtime$prev,
   type = "b",
   pch = 19,
-  col = global_colsblue[5],
+  col = global_cols[1],
   lty = 1,
   lwd = 3,
   add = T
@@ -34,27 +34,19 @@ matplot(tg_overtime$ar,
 
 box(bty = "l")
 
-axis(2, at = seq(0, 40, 5), cex.axis = cexmy, las = 2)
+axis(2,
+  at = c(seq(0, 40, 5), 45),
+  c(seq(0, 40, 5), 100),
+  cex.axis = cexmy, las = 2
+)
+plotrix::axis.break(2, 42.5, style = "slash")
 
 axis(1, at = 2003:global_year, cex.axis = cexmy)
 
-axis(2,
-  at = tg_overtime %>% filter(ar == global_year) %>% select(prev),
-  labels = c("Prevalent"),
-  line = -21,
-  tick = FALSE, cex.axis = cexmy,
-  las = 2,
-  hadj = 0,
-  gap.axis = -10000000
-)
-axis(2,
-  at = tg_overtime %>% filter(ar == global_year - 1) %>% select(inc),
-  labels = c("Incident"),
-  line = -21,
-  tick = FALSE, cex.axis = cexmy,
-  las = 2,
-  hadj = 0,
-  gap.axis = -10000000
+legend(
+  x = 2003, y = 40, legend = c("Prevalent", "Incident"),
+  bty = "n", col = global_cols[1:2], lwd = 3, pch = 19, 
+  cex = cexmy
 )
 ```
 
@@ -110,13 +102,13 @@ geo <- tg_lan %>%
   )
 ```
 
-```{r tgmap, fig.cap=paste0("Täckningsgrad ", global_year, " (prevalent) och ", global_year -1, " (incident) uppdelat på region (karta)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
+```{r tgmap, fig.cap=paste0("Covarage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region (map)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
 par(mar = c(0, 0, 0, 0) + 0.1)
 
-mapcols <- global_colsblue[1:7]
+mapcols <- global_cols[1:7]
 
 mapdata <- geo %>%
   arrange(region_mapnr)
