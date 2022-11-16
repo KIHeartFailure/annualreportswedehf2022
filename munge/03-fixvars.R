@@ -157,7 +157,7 @@ rsdata <- left_join(
     ttype = if_else(diff_timeadmission >= 1.5 * 365 & TYPE == "YEARLY_FOLLOWUP", 4, ttype),
     ttype = factor(ttype,
       levels = 1:4,
-      labels = c("Index", "3 month follow-up", "1 year follow-up", "2+ year follow-up")
+      labels = c("Index", "3-month follow-up", "1-year follow-up", "2+-year follow-up")
     )
   )
 

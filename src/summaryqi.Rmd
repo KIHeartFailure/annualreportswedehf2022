@@ -121,7 +121,7 @@ axis(1,
 
 axis(1,
   at = b[22],
-  labels = "3 month follow-up", line = 6.1, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 1
+  labels = "3-month follow-up", line = 6.1, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 1
 )
 
 posarrow <- -47.5

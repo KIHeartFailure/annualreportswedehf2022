@@ -1,5 +1,6 @@
 ---
 title: 'SWEDEHEART Annual Report 2022 SwedeHF Appendix'
+subtitle: "DRAFT - PREL NUMBERS 2022-11-14"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
@@ -11,7 +12,8 @@ output:
     number_sections: no
 urlcolor: blue
 linkcolor: black
-header-includes: 
+header-includes:
+  - \usepackage{draftwatermark}
   - \usepackage{subfig}
   - \usepackage{fontspec}
   - \usepackage{fancyhdr} 
@@ -59,52 +61,58 @@ ProjectTemplate::reload.project()
 cacheon <- TRUE
 ```             
 
-# Information och förklaringar
+# Information and explanations
 
-Uppgifterna som redovisas är baserade på data inrapporterat i RiksSvikt tom 2022-02-28.  
+The information presented is based on data reported in SwedeHF until 31st of February 2022. 
 
-Redovisningen utgår från det datum som patienten skrevs in/besöksdatum.
+The presentation is based on the date of the patients visit/admission.
 
-Med index avses första gången en patient registreras i RiksSvikt, detta behöver inte vara en nydiagnostiserad hjärtsvikt. 
-Uppföljningen vid 3 månader kan ske mellan 6 veckor och 6 månader efter index, medeltiden från index är 
-`r formatC(mean(rsdata %>% filter(ttype == "3 month follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 30.5, format = "f", digits = 1, decimal.mark = ",")` månader 
-for uppföljningar inrapporterade under `r global_year`. 
-Årlig uppföljning är indelat i 1 årsuppföljning (6 månader till 1,5 år efter index) och 2+ årsuppföljning (från 1,5 år efter index). 
-Medeltiden från index till 1 årsuppföljningen är 
-`r formatC(mean(rsdata %>% filter(ttype == "1 year follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 365.25, format = "f", digits = 1, decimal.mark = ",")` år och till 2+ årsuppföljningen är det
-`r formatC(mean(rsdata %>% filter(ttype == "2+ year follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 365.25, format = "f", digits = 1, decimal.mark = ",")` år för uppföljningar inrapporterade under 2021 `r global_year`. 
+Index is defined as  the first time a patient is registered in SwedeHF, not necessarily with newly diagnosed heart failure. Follow-up at 3 months can occur between 6 weeks and 6 months after index, with a mean time of 
+`r formatC(mean(rsdata %>% filter(ttype == "3-month follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 30.5, format = "f", digits = 1, decimal.mark = ".")` months from index for follow-up visits during `r global_year`. 
 
-I de fall det finns mer än en årlig registrering / patient har alla poster redovisats. 
-For 2+ årsuppföljningen finns `r rsdata %>% filter(ttype == "2+ year follow-up" & indexyear == global_year) %>% nrow()` poster for 
-`r rsdata %>% filter(ttype == "2+ year follow-up" & indexyear == global_year) %>% group_by(patientreference) %>% slice(1) %>% ungroup() %>% nrow()` 
-unika patienter for `r global_year`.  
+Yearly follow-up is divided into 1-year follow-up (from 6 months until 1.5 years after index), and 2+ years follow-up (from 1.5 years after index). The mean time from index until 1-year follow-up is 
+`r formatC(mean(rsdata %>% filter(ttype == "1-year follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 365.25, format = "f", digits = 1, decimal.mark = ".")` years and for 2+ years follow-up
+`r formatC(mean(rsdata %>% filter(ttype == "2+-year follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 365.25, format = "f", digits = 1, decimal.mark = ".")` years during `r global_year`. 
 
-Enheter med färre än 10 registreringar i nämnaren redovisas ej.
+In cases where multiple yearly follow-up visits exist all visits have been presented. 
+For 2+ years follow-up there are `r rsdata %>% filter(ttype == "2+-year follow-up" & indexyear == global_year) %>% nrow()` observations for `r rsdata %>% filter(ttype == "2+-year follow-up" & indexyear == global_year) %>% group_by(patientreference) %>% slice(1) %>% ungroup() %>% nrow()` 
+unique patients during `r global_year`.  
 
-R koden som genererat tabellbilagan till årsrapporten finns: https://github.com/KIHeartFailure/annualreportswedehf2022.
+Units with less than 10 observations in the denominator are not presented.
+
+The R code that has generated this report is found https://github.com/KIHeartFailure/arsrapportrikssvikt2022. 
 
 \clearpage
 
 # Covarage
 
-**Numerator prevalent täckningsgrad:** Individer registrerade i RiksSvikt, fyllda 18 år vid tillfället, vid liv per första januari det aktuella året och registrerade i RiksSvikt någon gång under perioden från och med registrets start 2003 till och med sista december det aktuella året. För de år som uppgift om registreringsdatum finns i RiksSvikt, dvs. från och med 2017 och framåt, inkluderas bara de registreringar som inkommit fram till och med 31 mars året efter det aktuella prevalensåret.
+**Numerator prevalent covarage:** Individuals registered in SwedeHF, 18 years 
+of age at the time, alive as of the first of January of the current year and 
+registered in SwedeHF sometime during the period from the start of the register 
+in 2003 up to and including the end of the December of the year in question. 
+For the years where information about the registration date is available 
+in SwedeHF, i.e. from 2017 onwards, only the registrations received up to and 
+including March 31 of the year following the relevant year are included.
 
-**Denominator prevalent täckningsgrad:** Individer fyllda 18 år och vid liv första januari det aktuella året, med någon registrering med hjärtsvikt som huvuddiagnos (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) i patientregistret fram till och med sista december det aktuella året.
+**Denominator prevalent covarage:** Individuals aged 18 and alive on January 1 of the current year, with a registration for heart failure as the main diagnosis (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) in the National Patient Register up to and including the end of December of the year in question. 
 
-*Täckningsgraden för `r global_year` baseras pa icke kvalitetsgranskade uppgifter från Socialstyrelsen. Definitionen av täckningsgraden tillåter förekomst i RiksSvikt efter förekomst i patientregistret vilket medför att täckningsgraden inte är komplett för `r global_year`. Täckningsgraden för `r global_year` bör därför betraktas som preliminär.* 
+*The coverage rate for `r global_year` is based on non-quality-reviewed data from the National Board of Health and Welfare. The definition of the coverage allows occurrence in SwedeHF after occurrence in the National Patient Register, which means that the coverage is not complete for `r global_year`. The coverage rate for `r global_year` should therefore be considered preliminary.*
 
-**Numerator incident täckningsgrad:** Individer i RiksSvikt, fyllda 18 år och med första registrering under det aktuella året eller med första registrering inom 1 år från första hjärtsviktdiagnos i patientregistret.
+**Numerator incident covarage:** Individuals in SwedeHF, over 18 years of age and with first registration during the year in question or with first registration within 1 year of the first heart failure diagnosis in the National Patient Register.
 
-**Denominator incident täckningsgrad:** Individer som registrerats med hjärtsvikt (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) 
-för första gången under det aktuella året, antingen i RiksSvikt eller i patientregistret.
+**Denominator incident covarage:** Individuals registered with heart failure (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) for the first time during the current year, either in SwedeHF or in the National Patient Register.
 
-```{r, child = "./src/tg.Rmd"}
+**The coverage can be calculated in April 2022 - Figures coming.** 
 
-```
+---
+#```{r, child = "./src/tg.Rmd"}
 
-```{r, child = "./src/tg_bar.Rmd"}
+#```
 
-```
+#```{r, child = "./src/tg_bar.Rmd"}
+
+#```
+---
 
 \clearpage
 
@@ -137,11 +145,11 @@ piefunc(var = "FUNCTION_CLASS_NYHA", type = c("Index"))
 piefunc(var = "ef_cat3", type = c("Index"))
 ```             
 
-```{r enhetpie, cache = cacheon, fig.cap = paste0("Unit type ", global_year), fig.show='hold', out.width="25%", fig.subcap=c('Index', '3 month follow-up', '1 year follow-up', '2+ year follow-up'), fig.ncol=4}
+```{r enhetpie, cache = cacheon, fig.cap = paste0("Unit type ", global_year), fig.show='hold', out.width="25%", fig.subcap=c('Index', '3-month follow-up', '1-year follow-up', '2+-year follow-up'), fig.ncol=4}
 piefunc(var = "vtype", type = c("Index"))
-piefunc(var = "vtype", type = c("3 month follow-up"))
-piefunc(var = "vtype", type = c("1 year follow-up"))
-piefunc(var = "vtype", type = c("2+ year follow-up"))
+piefunc(var = "vtype", type = c("3-month follow-up"))
+piefunc(var = "vtype", type = c("1-year follow-up"))
+piefunc(var = "vtype", type = c("2+-year follow-up"))
 ```     
 
 \elandscape
@@ -151,7 +159,7 @@ barfunc(var = "location", type = "Index")
 ```             
 
 ```{r enhetbar, cache = cacheon, fig.cap = paste0("Unit type for all registrations ", global_year, " by region"), fig.width=7, fig.height=8}
-barfunc(var = "vtype", type = c("Index", "3 month follow-up", "1 year follow-up", "2+ year follow-up"))
+barfunc(var = "vtype", type = c("Index", "3-month follow-up", "1-year follow-up", "2+-year follow-up"))
 ```             
 
 \clearpage
@@ -179,9 +187,10 @@ qifunc(type = "Index")
 
 # Quality Indicators
 
-Kvalitetsindikatorerna rapporterat LVEF, NT-proBNP, NYHA klass och Hälsotillstånd tillika planerad uppföljning vid hjärtsviktsmottagning är definierat vid indextillfället. Behandlingsindikatorer, inklusive fysisk träning, är definierat vid uppföljningsbesöket vid 3 månader efter index. 
+The quality indicators reported LVEF, NT-proBNP, NYHA class and QoL EQ-5D as well as planned follow-up at a heart failure clinic are defined at index. The treatment indicators, including physical exercise, are defined at the follow-up visit 3 months after index. 
 
-Kvalitetsindikatorn uppföljningsbesök vid 3 månader rapporterat är definierat utifrån indexbesök inom tidsspannet `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.
+The quality indicator reported follow-up visits at 3 months 
+is defined within the time frame `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.
 
 \clearpage
 
@@ -200,7 +209,7 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** LVEF har angetts, antingen semikvantitativt eller i procent, vid indextillfället. 
+**Numerator:** LVEF has been reported, either semi quantitatively or as a percentage, at index. 
 
 **Denominator:** All patients with an index registration.
 
@@ -227,8 +236,8 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** NT-proBNP har angetts vid indextillfället. För slutenvårdspatienter kan detta vara 
-antingen vid inskrivning eller efter 24 timmar. 
+**Numerator:** NT-proBNP has been reported at index. For inpatients, this can 
+be either at enrollment or after 24 hours.
 
 **Denominator:** All patients with an index registration.
 
@@ -255,7 +264,7 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** NYHA klass I, II, III eller IV har angetts vid indextillfället. 
+**Numerator:** NYHA class I, II, III, or IV has been reported at index. 
 
 **Denominator:** All patients with an index registration.
 
@@ -282,7 +291,8 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** Patientens skattade hälsotillstånd (livskvalitetsscore enligt EQ-5D) har angetts vid indextillfället.  
+**Numerator:** The patient's estimated state of health 
+(quality of life score according to EQ-5D) has been reported at index.
 
 **Denominator:** All patients with an index registration.
 
@@ -309,9 +319,9 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** De som, vid indextillfället, har planerad uppföljning vid en hjärtsviktsmottagning. 
+**Numerator:** Those who, at the time of index, have a planned follow-up at a heart failure clinic. 
 
-**Denominator:** Alla indextillfällen där patienten lever vid utskrivning och där uppgift om planerad uppföljning rapporterats.
+**Denominator:** All index registrations where the patient is alive at discharge and where information about planned follow-up has been reported.
 
 ```{r hfupptid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE)
@@ -336,11 +346,11 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** Patienter som har ett registrerat uppföljningsbesök vid 3 månader (6 veckor - 6 månader) efter indextillfället.  
+**Numerator:** Patients who have a registered follow-up visit at 3 months (6 weeks - 6 months) after index.
 
-**Denominator:** Alla indextillfällen där patienten lever vid 3 månader. 
+**Denominator:** All index registrations where the patient is alive at 3 months.
 
-*I figuren dar uppfoljningsbesok vid 3 manader over time presenteras ingar endast indexbesok tom `r paste0(global_year, "-07-01")` i `r global_year`. I ovriga presentationer ar tidsintervallet for indexbesoket `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.*
+*In the figure where follow-up visit at 3 months over time is presented only index registrations until `r paste0(global_year, "-07-01")` are included in `r global_year`. In other presentations the time interval for the index is `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.*
 
 ```{r uppf3tid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE, legplace = c(1, 50))
@@ -365,13 +375,14 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** ACE-hämmare, A2-blockerare/ARB eller ARNI har använts. 
+**Numerator:** ACE inhibitors, A2 blockers/ARBs or ARNIs have been prescribed.
 
-**Denominator:** Patienter där LVEF < 40% och som lever vid utskrivning och där uppgift 
-om användning av ACE-hämmare, A2-blockerare/ARB och ARNI har rapporterats. 
-LVEF definieras som det lägst uppmätta, antingen vid aktuellt tillfälle eller vid indextillfället. 
+**Denominator:** Patients with LVEF < 40%, who are alive at discharge and 
+where information on the prescription of ACE inhibitors, A2 blockers/ARBs 
+and ARNIs has been reported. LVEF is defined as the lowest measured LVEF, 
+either at the presented registration or at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r rastid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(ylimmin = c(70, 100), legplace = c(1, 75))
@@ -393,28 +404,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r ras3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r ras3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r ras3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r ras3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r ras1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r ras1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r ras1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r ras1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r ras2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r ras2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r ras2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r ras2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -428,13 +439,13 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** ARNI har använts. 
+**Numerator:** ARNI has been prescribed. 
 
-**Denominator:** Patienter där LVEF < 40% och som lever vid utskrivning och 
-där ACE-hämmare, A2-blockerare/ARB eller ARNI har använts. 
-LVEF definieras som det lägst uppmätta, antingen vid aktuellt tillfälle eller vid indextillfället. 
+**Denominator:** Patients where LVEF < 40%, who are alive at discharge 
+and where ACE inhibitors, A2 blockers/ARBs or ARNIs have been prescribed. 
+LVEF is defined as the lowest measured LVEF, either at the presented registration or at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r arnitid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(legplace = c(1, 65))
@@ -456,28 +467,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r arni3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r arni3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r arni3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r arni3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r arni1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r arni1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r arni1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r arni1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r arni2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r arni2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r arni2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r arni2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -491,13 +502,13 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** Betablockerare har använts.
+**Numerator:** Beta-blockers have been prescribed.
 
-**Denominator:** Patienter där LVEF < 40% och som lever vid utskrivning och där uppgift 
-om användning av Betablockerare har rapporterats. 
-LVEF definieras som det lägst uppmätta, antingen vid aktuellt tillfälle eller vid indextillfället. 
+**Denominator:** Patients where LVEF < 40%, who are alive at discharge 
+and where the prescription of beta-blockers has been reported. LVEF is 
+defined as the lowest measured LVEF, either at the presented registration or at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r bbltid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(ylimmin = c(70, 100), legplace = c(1, 75))
@@ -519,28 +530,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r bbl3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r bbl3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r bbl3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r bbl3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r bbl1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r bbl1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r bbl1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r bbl1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r bbl2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r bbl2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r bbl2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r bbl2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -554,13 +565,13 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** MRA har använts. 
+**Numerator:** MRA has been prescribed.
 
-**Denominator:** Patienter där LVEF < 40% och som lever vid utskrivning och där uppgift 
-om användning av MRA har rapporterats. 
-LVEF definieras som det lägst uppmätta, antingen vid aktuellt tillfälle eller vid indextillfället. 
+**Denominator:** Patients where LVEF < 40%, who are alive at discharge and 
+where information on the prescription of MRA has been reported. LVEF is 
+defined as the lowest measured LVEF, either at the presented registration  or at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r mratid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc()
@@ -582,28 +593,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r mra3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r mra3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r mra3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r mra3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r mra1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r mra1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r mra1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r mra1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r mra2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r mra2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r mra2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r mra2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -617,13 +628,14 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** ACEI/ARB/ARNI, Betablockerare och MRA har använts. 
+**Numerator:** ACEI/ARB/ARNI, Beta-blockers and MRA have been prescribed.
 
-**Denominator:** Patienter där LVEF < 40% och som lever vid utskrivning och där uppgift 
-om användning av ACEI/ARB/ARNI, Betablockerare och MRA har rapporterats. 
-LVEF definieras som det lägst uppmätta, antingen vid aktuellt tillfälle eller vid indextillfället. 
+**Denominator:** Patients where LVEF < 40%, who are alive at discharge and 
+where information on the prescription of ACEI/ARB/ARNI, Beta-blockers and MRA 
+has been reported. LVEF is defined as the lowest measured LVEF, 
+either at the presented registration or at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r trippeltid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc()
@@ -645,28 +657,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r trippel3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r trippel3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r trippel3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r trippel3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r trippel1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r trippel1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r trippel1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r trippel1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r trippel2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r trippel2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r trippel2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r trippel2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -680,13 +692,13 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** SGLT-2 hammare har använts. 
+**Numerator:** SGLT-2 inhibitors has been prescribed.
 
-**Denominator:** Patienter där LVEF < 40% och som lever vid utskrivning och där uppgift 
-om användning av SGLT-2 hämmare har rapporterats. 
-LVEF definieras som det lägst uppmätta, antingen vid aktuellt tillfälle eller vid indextillfället. 
+**Denominator:** Patients where LVEF < 40%, who are alive at discharge and where 
+information on the prescription of SGLT-2 inhibitors has been reported. LVEF is 
+defined as the lowest measured LVEF, either at the presented registration or at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r sglt2iregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
 qifunc(type = "Index", unit = "region")
@@ -696,28 +708,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r sglt23region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r sglt23region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r sglt23enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r sglt23enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r sglt21region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r sglt21region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r sglt21enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r sglt21enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r sglt22region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r sglt22region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r sglt22enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r sglt22enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -731,17 +743,19 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** CRT (med eller utan ICD) är implanterat. 
+**Numerator:** CRT (with or without ICD) is implanted.
 
-**Denominator:** Patienter där LVEF $<=$ 35% (LVEF i procent rapporterat) eller < 40% (semikvantitativt LVEF rapporterat)
-och där uppgift om device har rapporterats. Utöver detta ska vänstergrenblock (LBBB) 
-finnas och QRS-duration vara > 130. 
-I nämnaren ingår även personer med CRT implanterat, oavsett värden på QRS och LBBB 
-eller om dessa inte är rapporterade, vilket medför att andelen med CRT kan överskattas. 
-LVEF, QRS-duration och LBBB definieras i första hand det som registrerats vid aktuellt tillfälle,
-och i andra hand, om det saknas, det som registrerats vid indextillfället.   
+**Denominator:** Patients where LVEF $\leq$ 35% (LVEF as a percentage reported) 
+or < 40% (semiquantitative LVEF reported) and where information about device 
+has been reported. In addition to this, left bundle branch block (LBBB) 
+must be present and QRS duration must be > 130 ms. The denominator also 
+includes patients with CRT implanted, regardless of QRS duration and LBBB values or 
+if these are reported, which means that the proportion with CRT can be 
+overestimated. LVEF, QRS duration and LBBB are defined primarily 
+by what was recorded at the actual registration, and secondly, if 
+missing, by what was recorded at index. 
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r crttid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc()
@@ -763,28 +777,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r crt3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r crt3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r crt3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r crt3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r crt1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r crt1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r crt1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r crt1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r crt2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r crt2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r crt2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r crt2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -798,13 +812,11 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** ICD (med eller utan CRT) är implanterat. 
+**Numerator:** ICD (with or without CRT) is implanted. 
 
-**Denominator:** Patienter där LVEF $<=$ 35% (LVEF i procent rapporterat) eller < 40% (semikvantitativt LVEF rapporterat) 
-och där uppgift om device har rapporterats. LVEF definieras i första hand det som registrerats vid aktuellt tillfälle,
-och i andra hand, om det saknas, det som registrerats vid indextillfället. 
+**Denominator:** Patients where LVEF $\leq$ 35% (LVEF as a percentage reported) or < 40% (semiquantitative LVEF reported) and where information about device has been reported. LVEF is defined primarily by what was recorded at the actual registration, and secondly, if missing, by what was recorded at index.
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r icdtid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(legplace = c(1, 90))
@@ -826,28 +838,28 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r icd3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r icd3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r icd3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r icd3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r icd1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r icd1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r icd1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r icd1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r icd2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r icd2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r icd2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r icd2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        
 
 \clearpage
@@ -861,11 +873,12 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** Deltagande i organiserad fysisk träning för HF har skett. 
+**Numerator:** Participation in organized physical exercise for HF has taken place.
 
-**Denominator:** Patienter där uppgift om deltagande i organiserad fysisk träning för HF har rapporterats. 
+**Denominator:** Patients where information about participation in organized 
+physical exercise for HF has been reported. 
 
-*The quality indicator is defined at the 3 month follow-up.*
+*The quality indicator is defined at the 3-month follow-up.*
 
 ```{r fystid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
 timefunc(legplace = c(1, 90))
@@ -887,26 +900,26 @@ qifunc(type = "Index", unit = "region")
 qifunc(type = "Index")
 ```             
 
-```{r fys3region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up", unit = "region")
+```{r fys3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "region")
 ```             
 
-```{r fys3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 3 months ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "3 month follow-up")
+```{r fys3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up")
 ```             
 
-```{r fys1region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up", unit = "region")
+```{r fys1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "region")
 ```             
 
-```{r fys1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 1 year ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "1 year follow-up")
+```{r fys1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up")
 ```             
 
-```{r fys2region, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up", unit = "region")
+```{r fys2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "region")
 ```        
 
-```{r fys2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at follow-up 2+ years ", global_year, " by unit"), fig.width=7, fig.height=8}
-qifunc(type = "2+ year follow-up")
+```{r fys2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up")
 ```        

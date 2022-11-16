@@ -3,15 +3,15 @@ ProjectTemplate::reload.project(munge = F, data_loading = F)
 
 # Import data from UCR ----------------------------------------------------
 
-newrs <- read_sas("./raw-data/20220314/export/datauttag_arsrapport.sas7bdat")
+newrs <- read_sas("./raw-data/20221115/export/datauttag_arsrapport.sas7bdat")
 
 # Centre for new rs --------------------------------------------------------
 
-center <- read_sas("./raw-data/20220314/export/rikssvikt_ou.sas7bdat")
+center <- read_sas("./raw-data/20221115/export/rikssvikt_ou.sas7bdat")
 
 # center <- clean_data(center)
 
-sexage <- read_sas("./raw-data/20220314/export/rikssvikt_pd_dodsdatum.sas7bdat")
+sexage <- read_sas("./raw-data/20221115/export/rikssvikt_pd_dodsdatum.sas7bdat")
 
 # Store as RData in /data folder ------------------------------------------
 

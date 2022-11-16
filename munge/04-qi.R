@@ -80,7 +80,7 @@ rsdata <- rsdata %>%
 # uppföljningar 3 mån
 
 follow <- rsdata %>%
-  filter(ttype == "3 month follow-up") %>%
+  filter(ttype == "3-month follow-up") %>%
   mutate(followup = 1) %>%
   select(patientreference, followup)
 
@@ -124,28 +124,28 @@ qiinfo <- qiinfo %>%
       qivar == "qi_bbl" ~ "Beta-blockers",
       qivar == "qi_mra" ~ "MRA",
       qivar == "qi_trippel" ~ "Triple therapy",
-      qivar == "qi_sglt2" ~ "SGLT2i",
+      qivar == "qi_sglt2" ~ "SGLT-2i",
       qivar == "qi_crt" ~ "CRT",
       qivar == "qi_icd" ~ "ICD",
       qivar == "qi_fys" ~ "Physical exercise",
-      qivar == "qi_followreg3m" ~ "3 month follow-up"
+      qivar == "qi_followreg3m" ~ "3-month follow-up"
     ),
     qiname = case_when(
-      qivar == "qi_lvef" ~ "LVEF recorded at index",
-      qivar == "qi_ntprobnp" ~ "NT-proBNP recorded at index",
-      qivar == "qi_nyha" ~ "NYHA class recorded at index",
-      qivar == "qi_qol" ~ "QoL EQ-5D recorded at index",
+      qivar == "qi_lvef" ~ "LVEF reported at index",
+      qivar == "qi_ntprobnp" ~ "NT-proBNP reported at index",
+      qivar == "qi_nyha" ~ "NYHA class reported at index",
+      qivar == "qi_qol" ~ "QoL EQ-5D reported at index",
       qivar == "qi_uppfhf" ~ "Planned follow-up at HF clinic",
       qivar == "qi_ras" ~ "ACEI/ARB/ARNI",
       qivar == "qi_arni" ~ "Proportion ARNI of ACEI/ARB/ARNI",
       qivar == "qi_bbl" ~ "Beta-blockers",
       qivar == "qi_mra" ~ "MRA",
       qivar == "qi_trippel" ~ "Triple therapy",
-      qivar == "qi_sglt2" ~ "SGLT2i",
+      qivar == "qi_sglt2" ~ "SGLT-2i",
       qivar == "qi_crt" ~ "CRT",
       qivar == "qi_icd" ~ "ICD",
       qivar == "qi_fys" ~ "Physical exercise",
-      qivar == "qi_followreg3m" ~ "Follow-up visit at 3 months recorded"
+      qivar == "qi_followreg3m" ~ "Follow-up visit at 3 months reported"
     ),
     ll = case_when(
       qivar == "qi_lvef" ~ 0.8,
@@ -187,15 +187,15 @@ qiinfo <- qiinfo %>%
       qivar == "qi_nyha" ~ "Index",
       qivar == "qi_qol" ~ "Index",
       qivar == "qi_uppfhf" ~ "Index",
-      qivar == "qi_ras" ~ "3 month follow-up",
-      qivar == "qi_arni" ~ "3 month follow-up",
-      qivar == "qi_bbl" ~ "3 month follow-up",
-      qivar == "qi_mra" ~ "3 month follow-up",
-      qivar == "qi_trippel" ~ "3 month follow-up",
-      qivar == "qi_sglt2" ~ "3 month follow-up",
-      qivar == "qi_crt" ~ "3 month follow-up",
-      qivar == "qi_icd" ~ "3 month follow-up",
-      qivar == "qi_fys" ~ "3 month follow-up",
+      qivar == "qi_ras" ~ "3-month follow-up",
+      qivar == "qi_arni" ~ "3-month follow-up",
+      qivar == "qi_bbl" ~ "3-month follow-up",
+      qivar == "qi_mra" ~ "3-month follow-up",
+      qivar == "qi_trippel" ~ "3-month follow-up",
+      qivar == "qi_sglt2" ~ "3-month follow-up",
+      qivar == "qi_crt" ~ "3-month follow-up",
+      qivar == "qi_icd" ~ "3-month follow-up",
+      qivar == "qi_fys" ~ "3-month follow-up",
       qivar == "qi_followreg3m" ~ "Index"
     ),
     qino = case_when(

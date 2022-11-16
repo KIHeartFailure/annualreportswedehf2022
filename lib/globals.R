@@ -31,6 +31,6 @@ global_colslimit <- c("#33ac5a", "#f7a600")
 
 # year of report
 
-global_year <- 2021
+global_year <- 2022
 global_startdtm <- ymd(paste0(global_year, "-01-01"))
 global_stopdtm <- ymd(paste0(global_year, "-12-31"))

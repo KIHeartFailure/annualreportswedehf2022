@@ -1,5 +1,6 @@
 ---
 title: 'SWEDEHEART Annual Report 2022 SwedeHF sv'
+subtitle: "DRAFT - PREL NUMBERS 2022-11-14"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
@@ -12,6 +13,7 @@ output:
 urlcolor: blue
 linkcolor: black
 header-includes: 
+  - \usepackage{draftwatermark}
   - \usepackage{subfig}
   - \usepackage[swedish]{babel}
   - \usepackage{fontspec}

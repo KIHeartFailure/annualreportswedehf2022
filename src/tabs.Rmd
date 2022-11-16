@@ -61,8 +61,7 @@ tab1 <- tab1 %>%
     level = str_replace_all(level, fixed("\u2265"), "$\\geq$")
   ) %>%
   mutate(across(everything(), ~ str_replace_all(.x, fixed("0 (NaN)"), ""))) %>%
-  mutate(across(everything(), ~ str_replace_all(.x, fixed("(%)"), "(\\%)"))) %>%
-  mutate()
+  mutate(across(everything(), ~ str_replace_all(.x, fixed("(%)"), "(\\%)")))
 
 ## fix in order to use escape = TRUE
 colnames(tab1) <- c(colnames(tab1) <- c("", "", levels(rsdata$ttype)))
@@ -80,7 +79,7 @@ default_kable(tab1,
 ```{r, cache=cacheon, dependson="tabs"}
 
 tab1 <- table1(
-  data = tmprsdata,
+  data = tmprsdata %>% filter(!is.na(sex)),
   stratvar = c("sex", "ttype"),
   vars = tabvars[tabvars != "sex"]
 )

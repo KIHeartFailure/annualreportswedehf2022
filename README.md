@@ -5,7 +5,7 @@ and statistical analyses performed for the annual report for SwedeHF.
 
 ## Language 
 
-Swedish. 
+English. 
 
 ## Data
 

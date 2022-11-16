@@ -86,7 +86,7 @@ axis(2, at = 10000, "Number of registrations", cex.axis = cexmy, tick = FALSE, l
 
 axis(1, at = 1:length((global_year - 5):global_year), labels = (global_year - 5):global_year, cex.axis = cexmy)
 
-legend("topleft", all %>% pull(byvarname),
+legend(x = 0.9, y = 20500, all %>% pull(byvarname),
   col = global_cols[c(1, 2, 3, 4, 5, 6, 7, 8)],
   lwd = 3, pch = 19, bty = "n", cex = cexmy
 )

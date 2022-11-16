@@ -22,8 +22,8 @@ ProjectTemplate::cache("rsdata")
 ProjectTemplate::cache("qiinfo")
 ProjectTemplate::cache("qiinfosv")
 
-ProjectTemplate::cache("tg_lan")
-ProjectTemplate::cache("tg_overtime")
+#ProjectTemplate::cache("tg_lan")
+#ProjectTemplate::cache("tg_overtime")
 
 labnams <- c("Year", "Upper target level", "Lower target level", "Unknown")
 ProjectTemplate::cache("labnams")
@@ -31,5 +31,5 @@ ProjectTemplate::cache("labnams")
 labnamssv <- c("År", "Övre målnivå", "Lägre målnivå", "Okänd")
 ProjectTemplate::cache("labnamssv")
 
-shortttype <- c("Index", "3 month", "1 year", "2+ year")
+shortttype <- c("Index", "3-month", "1-year", "2+-year")
 ProjectTemplate::cache("shortttype")
