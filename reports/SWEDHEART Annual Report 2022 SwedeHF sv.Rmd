@@ -1,7 +1,7 @@
 ---
 title: 'SWEDEHEART Annual Report 2022 SwedeHF sv'
 subtitle: "DRAFT - PREL NUMBERS 2022-11-14"
-date: "`r Sys.Date()`"
+date: "Skapad: `r Sys.Date()`"
 output:
   pdf_document:
     dev: cairo_pdf
@@ -13,6 +13,9 @@ output:
 urlcolor: blue
 linkcolor: black
 header-includes: 
+  - \usepackage{titling}
+  - \pretitle{\begin{center}\LARGE\includegraphics[width=12cm]{logo_sv.png}\\[\bigskipamount]}
+  - \posttitle{\end{center}}
   - \usepackage{draftwatermark}
   - \usepackage{subfig}
   - \usepackage[swedish]{babel}
