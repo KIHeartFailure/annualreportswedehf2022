@@ -70,7 +70,7 @@ The information presented is based on data reported in SwedeHF until 31st of Feb
 
 The presentation is based on the date of the patients visit/admission.
 
-Index is defined as  the first time a patient is registered in SwedeHF, not necessarily with newly diagnosed heart failure. Follow-up at 3 months can occur between 6 weeks and 6 months after index, with a mean time of 
+Index is defined as the first time a patient is registered in SwedeHF, not necessarily with newly diagnosed heart failure. Follow-up at 3 months can occur between 6 weeks and 6 months after index, with a mean time of 
 `r formatC(mean(rsdata %>% filter(ttype == "3-month follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 30.5, format = "f", digits = 1, decimal.mark = ".")` months from index for follow-up visits during `r global_year`. 
 
 Yearly follow-up is divided into 1-year follow-up (from 6 months until 1.5 years after index), and 2+ years follow-up (from 1.5 years after index). The mean time from index until 1-year follow-up is 
@@ -87,9 +87,9 @@ The R code that has generated this report is found https://github.com/KIHeartFai
 
 \clearpage
 
-# Covarage
+# Coverage
 
-**Numerator prevalent covarage:** Individuals registered in SwedeHF, 18 years 
+**Numerator prevalent coverage:** Individuals registered in SwedeHF, 18 years 
 of age at the time, alive as of the first of January of the current year and 
 registered in SwedeHF sometime during the period from the start of the register 
 in 2003 up to and including the end of the December of the year in question. 
@@ -97,13 +97,13 @@ For the years where information about the registration date is available
 in SwedeHF, i.e. from 2017 onwards, only the registrations received up to and 
 including March 31 of the year following the relevant year are included.
 
-**Denominator prevalent covarage:** Individuals aged 18 and alive on January 1 of the current year, with a registration for heart failure as the main diagnosis (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) in the National Patient Register up to and including the end of December of the year in question. 
+**Denominator prevalent coverage:** Individuals aged 18 and alive on January 1 of the current year, with a registration for heart failure as the main diagnosis (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) in the National Patient Register up to and including the end of December of the year in question. 
 
 *The coverage rate for `r global_year` is based on non-quality-reviewed data from the National Board of Health and Welfare. The definition of the coverage allows occurrence in SwedeHF after occurrence in the National Patient Register, which means that the coverage is not complete for `r global_year`. The coverage rate for `r global_year` should therefore be considered preliminary.*
 
-**Numerator incident covarage:** Individuals in SwedeHF, over 18 years of age and with first registration during the year in question or with first registration within 1 year of the first heart failure diagnosis in the National Patient Register.
+**Numerator incident coverage:** Individuals in SwedeHF, over 18 years of age and with first registration during the year in question or with first registration within 1 year of the first heart failure diagnosis in the National Patient Register.
 
-**Denominator incident covarage:** Individuals registered with heart failure (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) for the first time during the current year, either in SwedeHF or in the National Patient Register.
+**Denominator incident coverage:** Individuals registered with heart failure (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) for the first time during the current year, either in SwedeHF or in the National Patient Register.
 
 **The coverage can be calculated in April 2022 - Figures coming.** 
 
@@ -239,7 +239,7 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** NT-proBNP has been reported at index. For inpatients, this can 
+**Numerator:** NT-proBNP has been reported at index. For in-patient care, this can 
 be either at enrollment or after 24 hours.
 
 **Denominator:** All patients with an index registration.
@@ -378,10 +378,10 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** ACE inhibitors, A2 blockers/ARBs or ARNIs have been prescribed.
+**Numerator:** ACE inhibitors, ARBs or ARNIs have been prescribed.
 
 **Denominator:** Patients with LVEF < 40%, who are alive at discharge and 
-where information on the prescription of ACE inhibitors, A2 blockers/ARBs 
+where information on the prescription of ACE inhibitors, ARBs 
 and ARNIs has been reported. LVEF is defined as the lowest measured LVEF, 
 either at the presented registration or at index.
 
@@ -445,7 +445,7 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 **Numerator:** ARNI has been prescribed. 
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge 
-and where ACE inhibitors, A2 blockers/ARBs or ARNIs have been prescribed. 
+and where ACE inhibitors, ARBs or ARNIs have been prescribed. 
 LVEF is defined as the lowest measured LVEF, either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
@@ -572,7 +572,7 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge and 
 where information on the prescription of MRA has been reported. LVEF is 
-defined as the lowest measured LVEF, either at the presented registration  or at index.
+defined as the lowest measured LVEF, either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
@@ -695,10 +695,10 @@ qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 
 ## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
 
-**Numerator:** SGLT-2 inhibitors has been prescribed.
+**Numerator:** SGLT2 inhibitors have been prescribed.
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge and where 
-information on the prescription of SGLT-2 inhibitors has been reported. LVEF is 
+information on the prescription of SGLT2 inhibitors has been reported. LVEF is 
 defined as the lowest measured LVEF, either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*

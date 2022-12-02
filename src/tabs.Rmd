@@ -47,7 +47,7 @@ tab1 <- tab1 %>%
       var == "HEART_VALVE_SURGERY" ~ "Valve surgery, n (%)",
       var == "BP_SYSTOLIC" ~ "Systolic blood pressure (mmHg), median [Q1-Q3]",
       var == "BP_DIASTOLIC" ~ "Diastolic blood pressure (mmHg), median [Q1-Q3]",
-      var == "HEART_FREQUENCY" ~ "Heart rate (slag/min), median [Q1-Q3]",
+      var == "HEART_FREQUENCY" ~ "Heart rate (beats/min), median [Q1-Q3]",
       var == "NT_PROBNP" ~ "NT-proBNP (pg/m/L), median [Q1-Q3]",
       var == "S_CREATININE" ~ "Creatinine (umol/L), median [Q1-Q3]",
       var == "S_POTASSIUM" ~ "Potassium (mmol/L), median [Q1-Q3]",
@@ -107,7 +107,7 @@ tab1 <- tab1 %>%
       var == "HEART_VALVE_SURGERY" ~ "Valve surgery, n (%)",
       var == "BP_SYSTOLIC" ~ "Systolic blood pressure (mmHg), median [Q1-Q3]",
       var == "BP_DIASTOLIC" ~ "Diastolic blood pressure (mmHg), median [Q1-Q3]",
-      var == "HEART_FREQUENCY" ~ "Heart rate (slag/min), median [Q1-Q3]",
+      var == "HEART_FREQUENCY" ~ "Heart rate (beats/min), median [Q1-Q3]",
       var == "NT_PROBNP" ~ "NT-proBNP (pg/m/L), median [Q1-Q3]",
       var == "S_CREATININE" ~ "Creatinine (umol/L), median [Q1-Q3]",
       var == "S_POTASSIUM" ~ "Potassium (mmol/L), median [Q1-Q3]",
@@ -136,7 +136,7 @@ names(myHeader) <- c(
 
 default_kable(tab1,
   font_size = 6,
-  #caption = paste0("Characteristics for patients registred during ", global_year, " by sex"),
+  caption = paste0("Characteristics for patients registred during ", global_year, " by sex"),
   escape = FALSE,
   align = c("l", "l", rep("c", ncol(tab1) - 2))
 ) %>% add_header_above(myHeader)
