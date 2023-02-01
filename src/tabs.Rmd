@@ -80,7 +80,7 @@ default_kable(tab1,
 
 tab1 <- table1(
   data = tmprsdata %>% filter(!is.na(sex)),
-  stratvar = c("sex", "ttype"),
+  stratvar = c("ttype", "sex"),
   vars = tabvars[tabvars != "sex"]
 )
 

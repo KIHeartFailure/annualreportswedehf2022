@@ -1,4 +1,4 @@
-```{r tgbar, fig.cap=paste0("Covarage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
+```{r tgbar, fig.cap=paste0("Coverage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 tgfunc <- function(tgtype) {
   empty <- tibble(

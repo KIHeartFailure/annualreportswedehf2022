@@ -1,6 +1,5 @@
 ---
 title: 'SWEDEHEART Annual Report 2022 SwedeHF sv'
-subtitle: "DRAFT - PREL NUMBERS 2022-11-14"
 date: "Skapad: `r Sys.Date()`"
 output:
   pdf_document:
@@ -16,7 +15,6 @@ header-includes:
   - \usepackage{titling}
   - \pretitle{\begin{center}\LARGE\includegraphics[width=12cm]{logo_sv.png}\\[\bigskipamount]}
   - \posttitle{\end{center}}
-  - \usepackage{draftwatermark}
   - \usepackage{subfig}
   - \usepackage[swedish]{babel}
   - \usepackage{fontspec}
@@ -37,7 +35,7 @@ header-includes:
 knitr::opts_chunk$set(
   echo = FALSE, include = TRUE, comment = "",
   warning = FALSE, message = FALSE, fig.pos = "H",
-  fig.path = "../output/figs/"
+  fig.path = "../output/figs/sv/"
 )
 options(knitr.kable.NA = "")
 ```

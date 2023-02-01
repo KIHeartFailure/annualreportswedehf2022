@@ -46,7 +46,7 @@ axis(2,
 )
 axis(2, at = mean(c(0, ymaxmin)), "Number of unique patients", cex.axis = cexmy, tick = FALSE, line = 3)
 
-axis(1, at = seq(2003, global_year, 1), cex.axis = cexmy)
+axis(1, at = seq(2003, global_year, 1), cex.axis = cexmy, las = 2)
 ```
 
 ```{r, cache=cacheon}

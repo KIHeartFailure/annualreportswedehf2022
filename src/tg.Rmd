@@ -1,4 +1,4 @@
-```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Covarage 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
+```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Coverage 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
 
 cexmy <- 0.7
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
@@ -102,7 +102,7 @@ geo <- tg_lan %>%
   )
 ```
 
-```{r tgmap, fig.cap=paste0("Covarage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region (map)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
+```{r tgmap, fig.cap=paste0("Coverage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region (map)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.

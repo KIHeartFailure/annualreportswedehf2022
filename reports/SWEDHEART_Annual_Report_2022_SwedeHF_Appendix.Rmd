@@ -1,6 +1,5 @@
 ---
 title: 'SWEDEHEART Annual Report 2022 SwedeHF Appendix'
-subtitle: "DRAFT - PREL NUMBERS 2022-11-14"
 date: "Created: `r Sys.Date()`"
 output:
   pdf_document:
@@ -16,7 +15,6 @@ header-includes:
   - \usepackage{titling}
   - \pretitle{\begin{center}\LARGE\includegraphics[width=12cm]{logo.png}\\[\bigskipamount]}
   - \posttitle{\end{center}}
-  - \usepackage{draftwatermark}
   - \usepackage{subfig}
   - \usepackage{fontspec}
   - \usepackage{fancyhdr} 
@@ -66,7 +64,7 @@ cacheon <- TRUE
 
 # Information and explanations
 
-The information presented is based on data reported in SwedeHF until 31st of February 2022. 
+The information presented is based on data reported in SwedeHF until 31st of January 2023. 
 
 The presentation is based on the date of the patients visit/admission.
 
@@ -99,13 +97,13 @@ including March 31 of the year following the relevant year are included.
 
 **Denominator prevalent coverage:** Individuals aged 18 and alive on January 1 of the current year, with a registration for heart failure as the main diagnosis (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) in the National Patient Register up to and including the end of December of the year in question. 
 
-*The coverage rate for `r global_year` is based on non-quality-reviewed data from the National Board of Health and Welfare. The definition of the coverage allows occurrence in SwedeHF after occurrence in the National Patient Register, which means that the coverage is not complete for `r global_year`. The coverage rate for `r global_year` should therefore be considered preliminary.*
+*The coverage for `r global_year` is based on non-quality-reviewed data from the National Board of Health and Welfare. The definition of the coverage allows occurrence in SwedeHF after occurrence in the National Patient Register, which means that the coverage is not complete for `r global_year`. The coverage rate for `r global_year` should therefore be considered preliminary.*
 
 **Numerator incident coverage:** Individuals in SwedeHF, over 18 years of age and with first registration during the year in question or with first registration within 1 year of the first heart failure diagnosis in the National Patient Register.
 
 **Denominator incident coverage:** Individuals registered with heart failure (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) for the first time during the current year, either in SwedeHF or in the National Patient Register.
 
-**The coverage can be calculated in April 2022 - Figures coming.** 
+**The coverage will be calculated in April 2023 - Figures coming.** 
 
 ---
 #```{r, child = "./src/tg.Rmd"}
@@ -158,7 +156,7 @@ piefunc(var = "vtype", type = c("2+-year follow-up"))
 \elandscape
 
 ```{r enhetbarindex, cache = cacheon, fig.cap = paste0("Unit type for index registrations ", global_year, " by region"), fig.width=7, fig.height=8}
-barfunc(var = "location", type = "Index")
+barfunc3(var = "location", type = "Index")
 ```             
 
 ```{r enhetbar, cache = cacheon, fig.cap = paste0("Unit type for all registrations ", global_year, " by region"), fig.width=7, fig.height=8}

@@ -171,8 +171,3 @@ koll2 <- rsdata %>%
   slice(2) %>%
   ungroup() %>%
   count(indexyear, ttype)
-
-# För att få data till test 2022
-
-#rsdata <- rsdata %>%
-#  mutate(indexyear = factor(if_else(indexyear == "2014", "2022", as.character(indexyear))))
