@@ -10,7 +10,7 @@ timefunc <- function(qi = qitmp, starttime = global_year - 5, stoptime = global_
 
     byvar <- "vtype"
     colsmy <- global_cols[1:2]
-    if (is.null(legplace)) legplace <- c(1, 20)
+    if (is.null(legplace)) legplace <- c(1, 22)
   }
   if (!onlyindex) {
     byvar <- "ttype"
@@ -37,39 +37,61 @@ timefunc <- function(qi = qitmp, starttime = global_year - 5, stoptime = global_
     select(-indexyear) %>%
     as.matrix()
 
+  ylimorg <- ylimmin
+
   if (!all(ylimmin == c(0, 100))) {
     if (ylimmin[1] != 0) ylimmin[1] <- ylimmin[1] - 5
     if (ylimmin[2] != 100) ylimmin[2] <- ylimmin[2] + 5
   }
-
-  cexmy <- 1.2
-  # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
-  par(mar = c(5.9, 4, 0.5, 0.5) + 0.1, xpd = FALSE)
-
-  matplot(datafig,
-    type = "b",
-    pch = 19,
-    col = colsmy,
-    lty = 1,
-    lwd = 3,
-    # cex = 1.5,
-    axes = FALSE,
-    xaxs = "i",
-    yaxs = "i",
-    ylim = ylimmin,
-    xlim = c(1 - 0.1, stoptime - starttime + 1 + 0.1),
-    ylab = "Percent",
-    xlab = labnams[1],
-    cex.lab = cexmy
-  )
-
-  box(bty = "l")
 
   if (ylimmin[2] - ylimmin[1] <= 22) {
     int <- 5
   } else {
     int <- 10
   }
+
+  cexmy <- 1.2
+  # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
+  par(mar = c(5.9, 4, 0.5, 0.5) + 0.1, xpd = FALSE)
+
+  plot(1,
+    type = "n",
+    ylim = ylimmin,
+    xlim = c(1 - 0.1, stoptime - starttime + 1 + 0.1),
+    axes = F,
+    xaxs = "i",
+    yaxs = "i",
+    ylab = "Proportion (%)",
+    xlab = labnams[1],
+    cex.lab = cexmy
+  )
+
+  abline(v = 1:(stoptime - starttime + 1), lty = 1, col = "gray", lwd = 1)
+  abline(h = seq(ylimorg[1], ylimorg[2], int), lty = 1, col = "gray", lwd = 1)
+
+  abline(h = ll * 100, col = global_colslimit[2], lty = 2, lwd = 2)
+  abline(h = ul * 100, col = global_colslimit[1], lty = 2, lwd = 2)
+
+  matplot(datafig,
+    type = "b",
+    pch = 19,
+    cex = 1.5,
+    col = colsmy,
+    lty = 1,
+    lwd = 4,
+    # cex = 1.5,
+    # axes = FALSE,
+    # xaxs = "i",
+    # yaxs = "i",
+    # ylim = ylimmin,
+    # xlim = c(1 - 0.1, stoptime - starttime + 1 + 0.1),
+    # ylab = "Proportion (%)",
+    # xlab = labnams[1],
+    # cex.lab = cexmy
+    add = TRUE
+  )
+
+  box(bty = "l")
 
   if (!all(ylimmin == c(0, 100))) {
     if (ylimmin[1] != 0) {
@@ -90,14 +112,11 @@ timefunc <- function(qi = qitmp, starttime = global_year - 5, stoptime = global_
     axis(2, seq(ylimmin[1], ylimmin[2], int), cex.axis = cexmy, las = 2)
   }
 
-  abline(h = ll * 100, col = global_colslimit[2], lty = 2, lwd = 1)
-  abline(h = ul * 100, col = global_colslimit[1], lty = 2, lwd = 1)
-
   axis(1, at = 1:(stoptime - starttime + 1), labels = starttime:stoptime, cex.axis = cexmy)
 
   legend(
     x = legplace[1], y = legplace[2], legend = str_replace(colnames(datafig), "_", " "),
-    bty = "n", col = colsmy, lwd = 3, pch = 19, cex = cexmy
+    bty = "n", col = colsmy, lwd = 4, cex = cexmy
   )
 
   if (!is.null(ll)) {
@@ -105,6 +124,7 @@ timefunc <- function(qi = qitmp, starttime = global_year - 5, stoptime = global_
       inset = c(-0, -0.23), xpd = NA,
       legend = labnams[2:3],
       lty = 2,
+      lwd = 2,
       col = global_colslimit,
       bty = "n",
       cex = cexmy,

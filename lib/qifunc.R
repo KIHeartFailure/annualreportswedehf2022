@@ -1,5 +1,5 @@
 qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_stopdtm, type,
-                   ll = lltmp, ul = ultmp, data = rsdata, unit = "center") {
+                   ll = lltmp, ul = ultmp, data = rsdata, unit = "centre") {
   tmp <- data %>%
     filter(ttype %in% type &
       indexdtm >= startime &
@@ -34,9 +34,9 @@ qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_sto
     mutate(byvar = 2) %>%
     rename(unit = hfdurindex)
 
-  #if (unit == "region") {
+  # if (unit == "county") {
   #  hfdur <- hfdur %>% mutate(unit = str_replace_all(unit, "Duration HF", "Dur HF"))
-  #}
+  # }
 
   # per vtyp
   vtype <- tmp %>%
@@ -53,7 +53,7 @@ qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_sto
     mutate(byvar = 3) %>%
     rename(unit = vtype)
 
-  # per center/region
+  # per centre/county
   unitdata <- tmp %>%
     filter(!is.na(!!sym(unit))) %>%
     group_by(!!sym(unit), .drop = F) %>%
@@ -100,16 +100,17 @@ qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_sto
     mutate(unit = factor(unit, levels = rev(levels(all$unit))))
 
 
-  if (unit == "center") {
-    cexmy <- .6
+  if (unit == "centre") {
+    cexmy <- .55
     # c(bottom, left, top, right)
     par(mar = c(4.1, 11.2, .1, 1.5) + 0.1)
   }
-  if (unit == "region") {
+  if (unit == "county") {
     cexmy <- .72
     # c(bottom, left, top, right)
     par(mar = c(4.1, 11.5, .1, 1.8) + 0.1)
   }
+
 
   b <- barplot(percent ~ unit,
     data = all,
@@ -120,18 +121,36 @@ qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_sto
     xaxs = "i", yaxs = "i",
     col = all$cols,
     width = 0.1,
-    border = "white",
+    border = NA,
     names.arg = NA,
     cex.lab = cexmy,
     xlim = c(0, 100)
   )
 
-  axis(1, seq(0, 100, 20), cex.axis = cexmy)
+  abline(v = seq(0, 100, 10), lty = 1, col = "gray", lwd = 1)
 
-  abline(v = ll * 100, col = global_colslimit[2], lty = 2, lwd = 1)
-  abline(v = ul * 100, col = global_colslimit[1], lty = 2, lwd = 1)
+  abline(v = ll * 100, col = global_colslimit[2], lty = 2, lwd = 2)
+  abline(v = ul * 100, col = global_colslimit[1], lty = 2, lwd = 2)
 
-  if (unit == "center") {
+  b <- barplot(percent ~ unit,
+    data = all,
+    horiz = TRUE,
+    axes = FALSE,
+    xlab = "",
+    ylab = "",
+    xaxs = "i", yaxs = "i",
+    col = all$cols,
+    width = 0.1,
+    border = NA,
+    names.arg = NA,
+    cex.lab = cexmy,
+    xlim = c(0, 100),
+    add = T
+  )
+
+  axis(1, seq(0, 100, 10), cex.axis = cexmy)
+
+  if (unit == "centre") {
     axis(2, at = b, labels = all$unit, line = 2.6, tick = FALSE, cex.axis = cexmy, las = 2, gap.axis = -10000000)
 
     axis(2, at = b, labels = all$ntot, line = 0.7, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
@@ -139,7 +158,7 @@ qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_sto
     axis(2, at = b, labels = all$per, line = -24, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
   }
 
-  if (unit == "region") {
+  if (unit == "county") {
     axis(2, at = b, labels = all$unit, line = 3.2, tick = FALSE, cex.axis = cexmy, las = 2, gap.axis = -10000000)
 
     axis(2, at = b, labels = all$ntot, line = 1, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
@@ -148,13 +167,14 @@ qifunc <- function(qi = qitmp, startime = global_startdtm, stoptime = global_sto
   }
 
   # mtext("n/N", side = 2, line = 1, at = last(b) + diff(tail(b, 2)), adj = 0.5, cex = cexmy, las = 2)
-  axis(1, at = 50, cex.axis = cexmy, labels = "Percent", line = 1, tick = FALSE, hadj = .5)
+  axis(1, at = 50, cex.axis = cexmy, labels = "Proportion (%)", line = 1, tick = FALSE, hadj = .5)
 
   if (!is.null(ll)) {
     legend("bottom",
       inset = c(-0, -.125), xpd = NA,
       legend = labnams[2:3],
       lty = 2,
+      lwd = 2,
       col = global_colslimit,
       bty = "n",
       cex = cexmy,

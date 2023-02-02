@@ -28,10 +28,10 @@ tab1 <- tab1 %>%
   mutate(
     var = case_when(
       var == "n" ~ "Sweden",
-      var == "vtype" ~ "Unit type, n (%)",
+      var == "vtype" ~ "Centre type, n (%)",
       var == "sex" ~ "Sex, n (%)",
-      var == "age" ~ "Age (year), median [Q1-Q3]",
-      var == "hfdurindex" ~ "HF duration at index (mo), n (%)",
+      var == "age" ~ "Age (years), median [Q1-Q3]",
+      var == "hfdurindex" ~ "HF duration at index (months), n (%)",
       var == "ef_cat3" ~ "LVEF (%), n (%)",
       var == "FUNCTION_CLASS_NYHA" ~ "NYHA class, n (%)",
       var == "LIFEQUALITY_SCORE" ~ "QoL EQ-5D, median [Q1-Q3]",
@@ -68,7 +68,7 @@ colnames(tab1) <- c(colnames(tab1) <- c("", "", levels(rsdata$ttype)))
 
 default_kable(tab1,
   font_size = 6,
-  caption = paste0("Characteristics for patients registred during ", global_year),
+  caption = paste0("Patient characteristics, ", global_year),
   escape = FALSE,
   align = c("l", "l", rep("c", ncol(tab1) - 2))
 )
@@ -88,10 +88,10 @@ tab1 <- tab1 %>%
   mutate(
     var = case_when(
       var == "n" ~ "Sweden",
-      var == "vtype" ~ "Unit type, n (%)",
+      var == "vtype" ~ "Centre type, n (%)",
       var == "sex" ~ "Sex, n (%)",
-      var == "age" ~ "Age (year), median [Q1-Q3]",
-      var == "hfdurindex" ~ "HF duration at index (mo), n (%)",
+      var == "age" ~ "Age (years), median [Q1-Q3]",
+      var == "hfdurindex" ~ "HF duration at index (months), n (%)",
       var == "ef_cat3" ~ "LVEF (%), n (%)",
       var == "FUNCTION_CLASS_NYHA" ~ "NYHA class, n (%)",
       var == "LIFEQUALITY_SCORE" ~ "QoL EQ-5D, median [Q1-Q3]",
@@ -136,7 +136,7 @@ names(myHeader) <- c(
 
 default_kable(tab1,
   font_size = 6,
-  caption = paste0("Characteristics for patients registred during ", global_year, " by sex"),
+  caption = paste0("Patient characteristics by sex, ", global_year),
   escape = FALSE,
   align = c("l", "l", rep("c", ncol(tab1) - 2))
 ) %>% add_header_above(myHeader)

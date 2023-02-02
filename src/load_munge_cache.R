@@ -6,16 +6,16 @@
 
 ProjectTemplate::reload.project(
   reset = TRUE,
-  data_loading = TRUE,
-  munging = TRUE
+  data_loading = TRUE#,
+  #munging = TRUE
 )
 
 # Run all files manually due to encoding problemas w Project Template but now working
 
-# source("./munge/01-clean_missing.R")
-# source("./munge/02-fixcenter.R")
-# source("./munge/03-fixvars.R")
-# source("./munge/04-qi.R")
+source("./munge/01-clean_missing.R")
+source("./munge/02-fixcenter.R")
+source("./munge/03-fixvars.R")
+source("./munge/04-qi.R")
 
 ProjectTemplate::cache("rsdata")
 

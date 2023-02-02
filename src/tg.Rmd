@@ -1,4 +1,4 @@
-```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Coverage 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
+```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Coverage, 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
 
 cexmy <- 0.7
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
@@ -45,7 +45,7 @@ axis(1, at = 2003:global_year, cex.axis = cexmy)
 
 legend(
   x = 2003, y = 40, legend = c("Prevalent", "Incident"),
-  bty = "n", col = global_cols[1:2], lwd = 3, pch = 19, 
+  bty = "n", col = global_cols[1:2], lwd = 3,  
   cex = cexmy
 )
 ```
@@ -55,7 +55,7 @@ legend(
 ```{r, cache=cacheon}
 
 geo <- tg_lan %>%
-  filter(!is.na(region) & region != "Riket") %>%
+  filter(!is.na(county) & county != "Riket") %>%
   mutate(
     prev_cat = case_when(
       pprev <= 5 ~ 1,
@@ -76,7 +76,7 @@ geo <- tg_lan %>%
       pinc <= 60 ~ 7
     ),
     regnums = str_sub(X1, 1, 2),
-    region_mapnr = case_when(
+    county_mapnr = case_when(
       regnums == "01" ~ 15,
       regnums == "03" ~ 16,
       regnums == "04" ~ 14,
@@ -102,7 +102,7 @@ geo <- tg_lan %>%
   )
 ```
 
-```{r tgmap, fig.cap=paste0("Coverage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region (map)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
+```{r tgmap, fig.cap=paste0("Coverage by county (map), ", global_year, " (prevalent) and ", global_year -1, " (incident)"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
@@ -111,7 +111,7 @@ par(mar = c(0, 0, 0, 0) + 0.1)
 mapcols <- global_cols[1:7]
 
 mapdata <- geo %>%
-  arrange(region_mapnr)
+  arrange(county_mapnr)
 
 plot(swedenmap, col = mapcols[mapdata$prev_cat], border = 0)
 legend("topright", bty = "n", border = mapcols, fill = mapcols, legend = c("0-5%", "6-10%", "11-20%", "21-30%", "31-40%", "41-50%", "51-60%"))

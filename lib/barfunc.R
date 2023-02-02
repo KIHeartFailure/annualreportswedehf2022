@@ -10,15 +10,15 @@ barfunc <- function(var, startime = global_startdtm, stoptime = global_stopdtm, 
   mycols <- global_cols[1:length(levs)]
   mycols[levs == "Unknown"] <- global_colsgreymiss
 
-  # per region
+  # per county
   unitdata <- tmp %>%
-    filter(region != "") %>%
-    group_by(region) %>%
+    filter(county != "") %>%
+    group_by(county) %>%
     count(!!sym(var), .drop = FALSE) %>%
     mutate(
       tot = sum(n),
       percent = n / tot * 100,
-      unit = as.character(region),
+      unit = as.character(county),
       var = !!sym(var)
     ) %>%
     ungroup() %>%
@@ -61,7 +61,7 @@ barfunc <- function(var, startime = global_startdtm, stoptime = global_stopdtm, 
     xaxs = "i", yaxs = "i",
     col = mycols,
     width = 0.1,
-    border = "white",
+    border = NA,
     las = 2,
     names.arg = rep(NA, length(unique(unitdata$unit))),
     cex.lab = cexmy,
@@ -76,7 +76,7 @@ barfunc <- function(var, startime = global_startdtm, stoptime = global_stopdtm, 
 
   axis(2, at = b, labels = percent$percent, line = -22.3, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
 
-  axis(1, at = 50, cex.axis = cexmy, labels = "Percent", line = 1, tick = FALSE, hadj = .5)
+  axis(1, at = 50, cex.axis = cexmy, labels = "Proportion (%)", line = 1, tick = FALSE, hadj = .5)
 
   legend("bottom",
     inset = c(-0, -.14), xpd = NA,
@@ -104,15 +104,15 @@ barfunc3 <- function(var, startime = global_startdtm, stoptime = global_stopdtm,
   mycols <- global_cols[1:length(levs)]
   mycols[levs == "Unknown"] <- global_colsgreymiss
   
-  # per region
+  # per county
   unitdata <- tmp %>%
-    filter(region != "") %>%
-    group_by(region) %>%
+    filter(county != "") %>%
+    group_by(county) %>%
     count(!!sym(var), .drop = FALSE) %>%
     mutate(
       tot = sum(n),
       percent = n / tot * 100,
-      unit = as.character(region),
+      unit = as.character(county),
       var = !!sym(var)
     ) %>%
     ungroup() %>%
@@ -155,7 +155,7 @@ barfunc3 <- function(var, startime = global_startdtm, stoptime = global_stopdtm,
                xaxs = "i", yaxs = "i",
                col = mycols,
                width = 0.1,
-               border = "white",
+               border = NA,
                las = 2,
                names.arg = rep(NA, length(unique(unitdata$unit))),
                cex.lab = cexmy,
@@ -170,7 +170,7 @@ barfunc3 <- function(var, startime = global_startdtm, stoptime = global_stopdtm,
   
   axis(2, at = b, labels = percent$percent, line = -22, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
   
-  axis(1, at = 50, cex.axis = cexmy, labels = "Percent", line = 1, tick = FALSE, hadj = .5)
+  axis(1, at = 50, cex.axis = cexmy, labels = "Proportion (%)", line = 1, tick = FALSE, hadj = .5)
   
   legend("bottom",
          inset = c(-0, -.14), xpd = NA,

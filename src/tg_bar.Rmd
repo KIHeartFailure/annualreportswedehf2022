@@ -1,18 +1,18 @@
-```{r tgbar, fig.cap=paste0("Coverage ", global_year, " (prevalent) and ", global_year -1, " (incident) by region"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
+```{r tgbar, fig.cap=paste0("Coverage, ", global_year, " (prevalent) and ", global_year -1, " (incident) by county"), cache=cacheon, fig.show='hold', out.width="50%", fig.subcap=c('Prevalent', 'Incident'), fig.ncol=2}
 
 tgfunc <- function(tgtype) {
   empty <- tibble(
     pinc = 0,
     pprev = 0,
-    region = ""
+    county = ""
   )
 
   unitdata <- tg_lan %>%
-    filter(region != "Sweden") %>%
-    arrange(desc(!!sym(paste0("p", tgtype))), region)
+    filter(county != "Sweden") %>%
+    arrange(desc(!!sym(paste0("p", tgtype))), county)
 
   all <- bind_rows(
-    tg_lan %>% filter(region == "Sweden"),
+    tg_lan %>% filter(county == "Sweden"),
     empty,
     unitdata
   )
@@ -20,21 +20,21 @@ tgfunc <- function(tgtype) {
   all <- all %>%
     mutate(
       cols = case_when(
-        region == "Sweden" ~ global_cols[1],
-        region == "" ~ "white",
+        county == "Sweden" ~ global_cols[1],
+        county == "" ~ "white",
         TRUE ~ global_cols[2],
       ),
       row = 1:n()
     ) %>%
     arrange(desc(row))
 
-  all$region <- forcats::fct_reorder(all$region, all$row)
+  all$county <- forcats::fct_reorder(all$county, all$row)
   all <- all %>%
     mutate(
-      region = factor(region, levels = rev(levels(all$region))),
+      county = factor(county, levels = rev(levels(all$county))),
       percent = !!sym(paste0("p", tgtype)),
-      per = if_else(region != "", paste0(fn(percent, dig = 0), "%"), ""),
-      ntot = if_else(region != "",
+      per = if_else(county != "", paste0(fn(percent, dig = 0), "%"), ""),
+      ntot = if_else(county != "",
         paste0(
           fnbm(!!sym(paste0("n", tgtype))),
           " of ",
@@ -47,11 +47,11 @@ tgfunc <- function(tgtype) {
   # c(bottom, left, top, right)
   par(mar = c(3, 11, .1, 1.5) + 0.1)
 
-  b <- barplot(percent ~ region,
+  b <- barplot(percent ~ county,
     data = all,
     horiz = TRUE,
     axes = FALSE,
-    xlab = "Percent",
+    xlab = "Proportion (%)",
     ylab = "",
     xaxs = "i", yaxs = "i",
     col = all$cols,
@@ -64,14 +64,14 @@ tgfunc <- function(tgtype) {
 
   axis(1, seq(0, 100, 20), cex.axis = cexmy)
 
-  axis(2, at = b, labels = all$region, line = 4.3, tick = FALSE, cex.axis = cexmy, las = 2, gap.axis = -10000000)
+  axis(2, at = b, labels = all$county, line = 4.3, tick = FALSE, cex.axis = cexmy, las = 2, gap.axis = -10000000)
 
   axis(2, at = b, labels = all$per, line = -19, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
 
   axis(2, at = b, labels = all$ntot, line = 1.6, tick = FALSE, cex.axis = cexmy, las = 2, hadj = 0.5, gap.axis = -10000000)
 
   # mtext("n/N", side = 2, line = 1, at = last(b) + diff(tail(b, 2)), adj = 0.5, cex = cexmy, las = 2)
-  axis(1, at = 50, cex.axis = cexmy, labels = "Percent", line = 1, tick = FALSE, hadj = .5)
+  axis(1, at = 50, cex.axis = cexmy, labels = "Proportion (%)", line = 1, tick = FALSE, hadj = .5)
 }
 
 tgfunc(tgtype = "prev")

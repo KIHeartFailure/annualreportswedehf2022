@@ -76,12 +76,12 @@ Yearly follow-up is divided into 1-year follow-up (from 6 months until 1.5 years
 `r formatC(mean(rsdata %>% filter(ttype == "2+-year follow-up", indexyear == global_year) %>% pull(diff_timeadmission), na.rm = T) / 365.25, format = "f", digits = 1, decimal.mark = ".")` years during `r global_year`. 
 
 In cases where multiple yearly follow-up visits exist all visits have been presented. 
-For 2+ years follow-up there are `r rsdata %>% filter(ttype == "2+-year follow-up" & indexyear == global_year) %>% nrow()` observations for `r rsdata %>% filter(ttype == "2+-year follow-up" & indexyear == global_year) %>% group_by(patientreference) %>% slice(1) %>% ungroup() %>% nrow()` 
+For 2+ years follow-up there are `r fnbm(rsdata %>% filter(ttype == "2+-year follow-up" & indexyear == global_year) %>% nrow())` observations for `r fnbm(rsdata %>% filter(ttype == "2+-year follow-up" & indexyear == global_year) %>% group_by(patientreference) %>% slice(1) %>% ungroup() %>% nrow())` 
 unique patients during `r global_year`.  
 
-Units with less than 10 observations in the denominator are not presented.
+Counties or centres with less than 10 observations in the denominator are not presented.
 
-The R code that has generated this report is found https://github.com/KIHeartFailure/arsrapportrikssvikt2022. 
+The R code that has generated this report is found https://github.com/KIHeartFailure/annualreportswedehf2022. 
 
 \clearpage
 
@@ -139,14 +139,14 @@ including March 31 of the year following the relevant year are included.
 
 \blandscape
 
-```{r desk, cache = cacheon, fig.cap = paste0("Characteristics for patients with an index registration ", global_year), fig.show='hold', out.width="25%", fig.subcap=c('Sex', 'Age', 'NYHA class', 'LVEF'), fig.ncol=4}
+```{r desk, cache = cacheon, fig.cap = paste0("Patient characteristics at index, ", global_year), fig.show='hold', out.width="25%", fig.subcap=c('Sex', 'Age', 'NYHA class', 'LVEF'), fig.ncol=4}
 piefunc(var = "sex", type = c("Index"))
 piefunc(var = "age_cat", type = c("Index"))
 piefunc(var = "FUNCTION_CLASS_NYHA", type = c("Index"))
 piefunc(var = "ef_cat3", type = c("Index"))
 ```             
 
-```{r enhetpie, cache = cacheon, fig.cap = paste0("Unit type ", global_year), fig.show='hold', out.width="25%", fig.subcap=c('Index', '3-month follow-up', '1-year follow-up', '2+-year follow-up'), fig.ncol=4}
+```{r enhetpie, cache = cacheon, fig.cap = paste0("Centre type, ", global_year), fig.show='hold', out.width="25%", fig.subcap=c('Index', '3-month follow-up', '1-year follow-up', '2+-year follow-up'), fig.ncol=4}
 piefunc(var = "vtype", type = c("Index"))
 piefunc(var = "vtype", type = c("3-month follow-up"))
 piefunc(var = "vtype", type = c("1-year follow-up"))
@@ -155,11 +155,11 @@ piefunc(var = "vtype", type = c("2+-year follow-up"))
 
 \elandscape
 
-```{r enhetbarindex, cache = cacheon, fig.cap = paste0("Unit type for index registrations ", global_year, " by region"), fig.width=7, fig.height=8}
+```{r enhetbarindex, cache = cacheon, fig.cap = paste0("Centre type at index by county, ", global_year), fig.width=7, fig.height=8}
 barfunc3(var = "location", type = "Index")
 ```             
 
-```{r enhetbar, cache = cacheon, fig.cap = paste0("Unit type for all registrations ", global_year, " by region"), fig.width=7, fig.height=8}
+```{r enhetbar, cache = cacheon, fig.cap = paste0("Centre type all registrations by county, ", global_year), fig.width=7, fig.height=8}
 barfunc(var = "vtype", type = c("Index", "3-month follow-up", "1-year follow-up", "2+-year follow-up"))
 ```             
 
@@ -169,18 +169,18 @@ barfunc(var = "vtype", type = c("Index", "3-month follow-up", "1-year follow-up"
 qitmp <- "ferrtrans_available"
 lltmp <- NULL
 ultmp <- NULL
-qinametmp <- "Both transferrin and ferritin reported at index"
+qinametmp <- "both transferrin and ferritin documented at index"
 ```             
 
-```{r ferrtranstid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
-timefunc(onlyindex = TRUE, starttime = global_year - 4, legplace = c(1, 90))
+```{r ferrtranstid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 4, "-", global_year), fig.width=9, fig.height=7}
+timefunc(onlyindex = TRUE, starttime = global_year - 4, legplace = c(1, 92))
 ```             
 
-```{r ferrtransregion, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r ferrtranscounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r ferrtransenhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r ferrtransenhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
@@ -188,9 +188,9 @@ qifunc(type = "Index")
 
 # Quality Indicators
 
-The quality indicators reported LVEF, NT-proBNP, NYHA class and QoL EQ-5D as well as planned follow-up at a heart failure clinic are defined at index. The treatment indicators, including physical exercise, are defined at the follow-up visit 3 months after index. 
+The quality indicators LVEF, NT-proBNP, NYHA class and QoL EQ-5D as well as planned follow-up at a heart failure clinic are defined at index. The treatment quality indicators, including physical exercise, are defined at the follow-up visit 3 months after index. 
 
-The quality indicator reported follow-up visits at 3 months 
+The quality indicator follow-up visit at 3 months performed and documented 
 is defined within the time frame `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.
 
 \clearpage
@@ -208,21 +208,21 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** LVEF has been reported, either semi quantitatively or as a percentage, at index. 
+**Numerator:** Patients where LVEF has been documented, either semi quantitatively or as a percentage, at index. 
 
 **Denominator:** All patients with an index registration.
 
-```{r lveftid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r lveftid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE)
 ```             
 
-```{r lvefregion, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r lvefcounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r lvefenhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r lvefenhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
@@ -235,22 +235,22 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** NT-proBNP has been reported at index. For in-patient care, this can 
+**Numerator:** Patients where NT-proBNP has been documented at index. For in-patient care, this can 
 be either at enrollment or after 24 hours.
 
 **Denominator:** All patients with an index registration.
 
-```{r nttid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r nttid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE)
 ```             
 
-```{r ntregion, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r ntcounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r ntenhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r ntenhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
@@ -263,21 +263,21 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** NYHA class I, II, III, or IV has been reported at index. 
+**Numerator:** Patients where NYHA class I, II, III, or IV has been documented at index. 
 
 **Denominator:** All patients with an index registration.
 
-```{r nyhatid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r nyhatid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE)
 ```             
 
-```{r nyharegion, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r nyhacounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r nyhaenhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r nyhaenhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
@@ -290,22 +290,22 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** The patient's estimated state of health 
-(quality of life score according to EQ-5D) has been reported at index.
+**Numerator:** Patients where an estimated state of health 
+(quality of life score according to EQ-5D) has been assessed and documented at index.
 
 **Denominator:** All patients with an index registration.
 
-```{r qoltid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r qoltid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE)
 ```             
 
-```{r qolregion, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r qolcounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r qolenhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r qolenhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
@@ -318,21 +318,21 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** Those who, at the time of index, have a planned follow-up at a heart failure clinic. 
+**Numerator:** Patients who, at the time of index, have a planned follow-up at a heart failure clinic. 
 
-**Denominator:** All index registrations where the patient is alive at discharge and where information about planned follow-up has been reported.
+**Denominator:** All index registrations where the patient is alive at discharge and where information about planned follow-up has been documented.
 
-```{r hfupptid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r hfupptid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(onlyindex = TRUE)
 ```             
 
-```{r hfuppfregion, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r hfuppfcounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r hfuppfenhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r hfuppfenhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
@@ -345,23 +345,23 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** Patients who have a registered follow-up visit at 3 months (6 weeks - 6 months) after index.
+**Numerator:** Patients who have had a follow-up visit at 3 months (6 weeks - 6 months) after index performed and documented.
 
 **Denominator:** All index registrations where the patient is alive at 3 months.
 
-*In the figure where follow-up visit at 3 months over time is presented only index registrations until `r paste0(global_year, "-07-01")` are included in `r global_year`. In other presentations the time interval for the index is `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.*
+*In the figure `r paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year)` only index registrations until `r paste0(global_year, "-07-01")` are included in `r global_year`. In other presentations the time interval for the index is `r paste0(global_year - 1, "-07-01 - ", global_year, "-07-01")`.*
 
-```{r uppf3tid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
-timefunc(onlyindex = TRUE, legplace = c(1, 50))
+```{r uppf3tid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
+timefunc(onlyindex = TRUE, legplace = c(1, 52))
 ```  
 
-```{r uppf3region, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year - 1, "/", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region", startime = ymd(paste0(global_year - 1, "-07-01 - ")), stoptime = ymd(paste0(global_year, "-07-01")))
+```{r uppf3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by county, ", global_year - 1, "/", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county", startime = ymd(paste0(global_year - 1, "-07-01 - ")), stoptime = ymd(paste0(global_year, "-07-01")))
 ```             
 
-```{r uppf3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " ", global_year - 1, "/", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r uppf3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " by centre, ", global_year - 1, "/", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index", startime = ymd(paste0(global_year - 1, "-07-01 - ")), stoptime = ymd(paste0(global_year, "-07-01")))
 ```             
 
@@ -374,58 +374,59 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** ACE inhibitors, ARBs or ARNIs have been prescribed.
+**Numerator:** Patients with LVEF < 40%, who are alive at discharge and 
+where ACE inhibitors, ARBs or ARNIs has been prescribed.
 
 **Denominator:** Patients with LVEF < 40%, who are alive at discharge and 
 where information on the prescription of ACE inhibitors, ARBs 
-and ARNIs has been reported. LVEF is defined as the lowest measured LVEF, 
+and ARNIs has been documented. LVEF is defined as the lowest measured LVEF, 
 either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r rastid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r rastid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(ylimmin = c(70, 100), legplace = c(1, 75))
 ```  
 
 \blandscape
-```{r rassjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r rassjhpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r rasiregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r rasicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r rasienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r rasienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r ras3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r ras3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r ras3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r ras3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r ras1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r ras1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r ras1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r ras1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r ras2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r ras2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r ras2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r ras2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -438,9 +439,10 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** ARNI has been prescribed. 
+**Numerator:** Patients with LVEF < 40%, who are alive at discharge and 
+where ARNIs have been prescribed.
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge 
 and where ACE inhibitors, ARBs or ARNIs have been prescribed. 
@@ -448,49 +450,50 @@ LVEF is defined as the lowest measured LVEF, either at the presented registratio
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r arnitid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r arnitid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(legplace = c(1, 65))
 ```  
 
 \blandscape
-```{r arnisjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r arnisjhpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r arniiregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r arniicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r arniienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r arniienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r arni3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r arni3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r arni3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r arni3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r arni1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r arni1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r arni1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r arni1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r arni2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r arni2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r arni2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r arni2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
+
 
 \clearpage
 
@@ -501,57 +504,58 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** Beta-blockers have been prescribed.
+**Numerator:** Patients with LVEF < 40%, who are alive at discharge and 
+where beta-blockers have been prescribed.
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge 
-and where the prescription of beta-blockers has been reported. LVEF is 
+and where the prescription of beta-blockers has been documented. LVEF is 
 defined as the lowest measured LVEF, either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r bbltid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r bbltid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(ylimmin = c(70, 100), legplace = c(1, 75))
 ```  
 
 \blandscape
-```{r bllsjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r bllsjhpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r bbliregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r bblicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r bblienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r bblienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r bbl3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r bbl3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r bbl3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r bbl3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r bbl1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r bbl1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r bbl1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r bbl1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r bbl2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r bbl2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r bbl2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r bbl2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -564,57 +568,58 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** MRA has been prescribed.
+**Numerator:** Patients with LVEF < 40%, who are alive at discharge and 
+where MRA has been prescribed.
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge and 
-where information on the prescription of MRA has been reported. LVEF is 
+where information on the prescription of MRA has been documented. LVEF is 
 defined as the lowest measured LVEF, either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r mratid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r mratid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc()
 ```  
 
 \blandscape
-```{r mrasjgpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r mrasjgpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r mrairegion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r mraicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r mraienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r mraienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r mra3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r mra3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r mra3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r mra3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r mra1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r mra1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r mra1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r mra1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r mra2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r mra2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r mra2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r mra2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -627,58 +632,59 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** ACEI/ARB/ARNI, Beta-blockers and MRA have been prescribed.
+**Numerator:** Patients with LVEF < 40%, who are alive at discharge and 
+where ACEI/ARB/ARNI, beta-blockers and MRA have been prescribed.
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge and 
 where information on the prescription of ACEI/ARB/ARNI, Beta-blockers and MRA 
-has been reported. LVEF is defined as the lowest measured LVEF, 
+has been documented. LVEF is defined as the lowest measured LVEF, 
 either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r trippeltid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r trippeltid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc()
 ```  
 
 \blandscape
-```{r trippelsjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r trippelsjhpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r trippliregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r tripplicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r trippelienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r trippelienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r trippel3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r trippel3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r trippel3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r trippel3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r trippel1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r trippel1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r trippel1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r trippel1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r trippel2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r trippel2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r trippel2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r trippel2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -691,45 +697,46 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** SGLT2 inhibitors have been prescribed.
+**Numerator:** Patients with LVEF < 40%, who are alive at discharge and 
+where SGLT2 inhibitors have been prescribed.
 
 **Denominator:** Patients where LVEF < 40%, who are alive at discharge and where 
-information on the prescription of SGLT2 inhibitors has been reported. LVEF is 
+information on the prescription of SGLT2 inhibitors has been documented. LVEF is 
 defined as the lowest measured LVEF, either at the presented registration or at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r sglt2iregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r sglt2icounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r sglt2ienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r sglt2ienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r sglt23region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r sglt23county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r sglt23enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r sglt23enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r sglt21region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r sglt21county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r sglt21enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r sglt21enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r sglt22region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r sglt22county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r sglt22enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r sglt22enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -742,63 +749,64 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** CRT (with or without ICD) is implanted.
+**Numerator:** Patients with LVEF $\leq$ 35% (LVEF as a percentage documented) 
+or < 40% (semiquantitative LVEF documented) and with a CRT (with or without ICD) implanted.
 
-**Denominator:** Patients where LVEF $\leq$ 35% (LVEF as a percentage reported) 
-or < 40% (semiquantitative LVEF reported) and where information about device 
-has been reported. In addition to this, left bundle branch block (LBBB) 
+**Denominator:** Patients with LVEF $\leq$ 35% (LVEF as a percentage documented) 
+or < 40% (semiquantitative LVEF documented) and where information about device 
+has been documented. In addition to this, left bundle branch block (LBBB) 
 must be present and QRS duration must be > 130 ms. The denominator also 
 includes patients with CRT implanted, regardless of QRS duration and LBBB values or 
-if these are reported, which means that the proportion with CRT can be 
+if these are documented, which means that the proportion with CRT can be 
 overestimated. LVEF, QRS duration and LBBB are defined primarily 
 by what was recorded at the actual registration, and secondly, if 
 missing, by what was recorded at index. 
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r crttid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r crttid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc()
 ```  
 
 \blandscape
-```{r crtsjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r crtsjhpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r crtiregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r crticounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r crtienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r crtienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r crt3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r crt3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r crt3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r crt3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r crt1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r crt1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r crt1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r crt1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r crt2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r crt2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r crt2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r crt2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -811,55 +819,56 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** ICD (with or without CRT) is implanted. 
+**Numerator:** Patients with LVEF $\leq$ 35% (LVEF as a percentage documented) 
+or < 40% (semiquantitative LVEF documented) and with a ICD (with or without CRT) implanted. 
 
-**Denominator:** Patients where LVEF $\leq$ 35% (LVEF as a percentage reported) or < 40% (semiquantitative LVEF reported) and where information about device has been reported. LVEF is defined primarily by what was recorded at the actual registration, and secondly, if missing, by what was recorded at index.
+**Denominator:** Patients with LVEF $\leq$ 35% (LVEF as a percentage documented) or < 40% (semiquantitative LVEF documented) and where information about device has been documented. LVEF is defined primarily by what was recorded at the actual registration, and secondly, if missing, by what was recorded at index.
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r icdtid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r icdtid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(legplace = c(1, 90))
 ```  
 
 \blandscape
-```{r icdsjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r icdsjhpv, cache = cacheon, fig.cap = sanitize_text(paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year)), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r icdiregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r icdicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r icdienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r icdienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r icd3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r icd3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r icd3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r icd3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r icd1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r icd1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r icd1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r icd1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r icd2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r icd2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r icd2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r icd2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        
 
@@ -872,55 +881,55 @@ ultmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(ul)
 qinametmp <- qiinfo %>% filter(qivar == qitmp) %>% pull(qiname)
 ```             
 
-## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", qinametmp)` 
+## Quality Indicator `r paste0(qiinfo %>% filter(qivar == qitmp) %>% pull(qino), ". ", firstcap(qinametmp))` 
 
-**Numerator:** Participation in organized physical exercise for HF has taken place.
+**Numerator:** Patients with participation in organized physical exercise for HF.
 
 **Denominator:** Patients where information about participation in organized 
-physical exercise for HF has been reported. 
+physical exercise for HF has been documented. 
 
 *The quality indicator is defined at the 3-month follow-up.*
 
-```{r fystid, cache = cacheon, fig.cap = paste0(qinametmp, " over time"), fig.width=9, fig.height=7}
+```{r fystid, cache = cacheon, fig.cap = paste0("Trends in ", qinametmp, ", ", global_year - 5, "-", global_year), fig.width=9, fig.height=7}
 timefunc(legplace = c(1, 90))
 ```  
 
 \blandscape
-```{r fyssjhpv, cache = cacheon, fig.cap = paste0(qinametmp, " over time Sweden, hospital och primary care"), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
+```{r fyssjhpv, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), ", Sweden, hospital och primary care, ", global_year - 2, "-",  global_year), fig.show='hold', out.width="33%", fig.subcap=c('Sweden', 'Hospital', 'Primary care'), fig.ncol=3}
 barsummary(unit = c("Hospital", "Primary care"))
 barsummary(unit = "Hospital")
 barsummary(unit = "Primary care")
 ```             
 \elandscape
 
-```{r fysiregion, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "Index", unit = "region")
+```{r fysicounty, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "Index", unit = "county")
 ```             
 
-```{r fysienhet, cache = cacheon, fig.cap = paste0(qinametmp, " at index ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r fysienhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at index by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "Index")
 ```             
 
-```{r fys3region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "3-month follow-up", unit = "region")
+```{r fys3county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "3-month follow-up", unit = "county")
 ```             
 
-```{r fys3enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 3-month follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r fys3enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 3-month follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "3-month follow-up")
 ```             
 
-```{r fys1region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "1-year follow-up", unit = "region")
+```{r fys1county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "1-year follow-up", unit = "county")
 ```             
 
-```{r fys1enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 1-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r fys1enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 1-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "1-year follow-up")
 ```             
 
-```{r fys2region, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by region"), fig.width=7, fig.height=8}
-qifunc(type = "2+-year follow-up", unit = "region")
+```{r fys2county, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by county, ", global_year), fig.width=7, fig.height=8}
+qifunc(type = "2+-year follow-up", unit = "county")
 ```        
 
-```{r fys2enhet, cache = cacheon, fig.cap = paste0(qinametmp, " at the 2+-year follow-up ", global_year, " by unit"), fig.width=7, fig.height=8}
+```{r fys2enhet, cache = cacheon, fig.cap = paste0(firstcap(qinametmp), " at the 2+-year follow-up by centre, ", global_year), fig.width=7, fig.height=8}
 qifunc(type = "2+-year follow-up")
 ```        

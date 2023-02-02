@@ -23,12 +23,12 @@ tg_lan <- full_join(
   mutate(isreg = str_detect(X1, "^\\d")) %>%
   filter(X1 == "RIKET" | isreg) %>%
   mutate(
-    region = str_sub(X1, 4),
-    region = case_when(
-      region == "ET" ~ "Sweden",
-      region == "Södermanland" ~ "Sörmland",
-      region == "Jämtland" ~ "Jämtland Härjedalen",
-      TRUE ~ region
+    county = str_sub(X1, 4),
+    county = case_when(
+      county == "ET" ~ "Sweden",
+      county == "Södermanland" ~ "Sörmland",
+      county == "Jämtland" ~ "Jämtland Härjedalen",
+      TRUE ~ county
     )
   )
 

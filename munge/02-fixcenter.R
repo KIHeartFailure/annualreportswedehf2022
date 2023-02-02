@@ -1,5 +1,5 @@
 
-# Add centers -------------------------------------------------------------
+# Add centres -------------------------------------------------------------
 
 rsdata <- left_join(rsdata,
   center %>%
@@ -8,21 +8,21 @@ rsdata <- left_join(rsdata,
 )
 
 
-# Add region ------------------------------------------------------------
+# Add county ------------------------------------------------------------
 
 rsdata <- left_join(rsdata,
   center %>%
     filter(DEPTH == 1) %>%
-    rename(region = ORG_UNIT_NAME) %>%
-    select(ID, region),
+    rename(county = ORG_UNIT_NAME) %>%
+    select(ID, county),
   by = c("PARENT1" = "ID")
 ) %>%
   mutate(
-    region = str_remove(region, "Region "),
-    region = str_remove(region, " län"),
-    region = str_remove(region, "sregionen"),
-    region = if_else(region == "Jönköpings", "Jönköping", region),
-    region = if_else(region == "Sörmanland", "Sörmland", region)
+    county = str_remove(county, "Region "),
+    county = str_remove(county, " län"),
+    county = str_remove(county, "sregionen"),
+    county = if_else(county == "Jönköpings", "Jönköping", county),
+    county = if_else(county == "Sörmanland", "Sörmland", county)
   )
 
 
@@ -33,12 +33,12 @@ rsdata <- left_join(rsdata,
 rsdata <- left_join(rsdata,
   center %>%
     filter(DEPTH == 2) %>%
-    rename(tmp_center = ORG_UNIT_NAME) %>%
-    select(ID, tmp_center),
+    rename(tmp_centre = ORG_UNIT_NAME) %>%
+    select(ID, tmp_centre),
   by = c("PARENT2" = "ID")
 ) %>%
   mutate(
-    center = case_when(
+    centre = case_when(
       ORG_UNIT_LEVEL_NAME %in% c("Fristående hjärtmottagning", "Vårdcentral") ~ ORG_UNIT_NAME,
       #ORG_UNIT_NAME %in% c("H Hjärta och Kärl 2 Avd", "H Hjärta och Kärl Mott") ~ "Karolinska Huddinge",
       #ORG_UNIT_NAME %in% c("Karolinska AVA 1 Solna", "S Hjärta och Kärl 1 Avd", "S Hjärta och Kärl Mott") ~ "Karolinska Solna",
@@ -54,28 +54,28 @@ rsdata <- left_join(rsdata,
         "Skånes universitetssjukhus kardiologmottagning Malmö",
         "Skånes universitetssjukhus Malmö medicinmottagning"
       ) ~ "Sus Malmö",
-      TRUE ~ tmp_center
+      TRUE ~ tmp_centre
     ),
-    center = case_when(
-      center == "Sahlgrenska Universitetssjukhuset - Sahlgrenska" ~ "SU - Sahlgrenska",
-      center == "Sahlgrenska Universitetssjukhuset - Östra" ~ "SU - Östra",
-      center == "Sahlgrenska Universitetssjukhuset - Mölndal" ~ "SU - Mölndal",
-      TRUE ~ center
+    centre = case_when(
+      centre == "Sahlgrenska Universitetssjukhuset - Sahlgrenska" ~ "SU - Sahlgrenska",
+      centre == "Sahlgrenska Universitetssjukhuset - Östra" ~ "SU - Östra",
+      centre == "Sahlgrenska Universitetssjukhuset - Mölndal" ~ "SU - Mölndal",
+      TRUE ~ centre
     )
   )
 
 # check so no more clinics at Sus
 koll <- rsdata %>%
-  count(center, tmp_center) %>%
-  #filter(tmp_center %in% c("Karolinska", "Skånes universitetssjukhus"))
-  filter(tmp_center %in% c("Skånes universitetssjukhus"))
-#if (any(!koll$center %in% c("Sus Malmö", "Sus Lund", "Karolinska Solna", "Karolinska Huddinge"))) stop("More clinics at Sus or KS")
-if (any(!koll$center %in% c("Sus Malmö", "Sus Lund"))) stop("More clinics at Sus")
+  count(centre, tmp_centre) %>%
+  #filter(tmp_centre %in% c("Karolinska", "Skånes universitetssjukhus"))
+  filter(tmp_centre %in% c("Skånes universitetssjukhus"))
+#if (any(!koll$centre %in% c("Sus Malmö", "Sus Lund", "Karolinska Solna", "Karolinska Huddinge"))) stop("More clinics at Sus or KS")
+if (any(!koll$centre %in% c("Sus Malmö", "Sus Lund"))) stop("More clinics at Sus")
 
 # check so no more clinics at Sahlgrenska
 koll2 <- rsdata %>%
-  count(center, center) %>%
-  filter(str_detect(center, "Sahlgrenska Universitetssjukhuset"))
+  count(centre, centre) %>%
+  filter(str_detect(centre, "Sahlgrenska Universitetssjukhuset"))
 if (nrow(koll2) > 0) stop("More clinics at SU")
 
 # Group VC ect ------------------------------------------------------------
@@ -86,21 +86,21 @@ rsdata <- rsdata %>%
       ORG_UNIT_LEVEL_NAME %in% c("Avdelning", "Fristående hjärtmottagning", "Mottagning") ~ 1,
       ORG_UNIT_LEVEL_NAME %in% c("Vårdcentral") ~ 2
     ), levels = 1:2, labels = c("Hospital", "Primary care")) # ,
-    # center = case_when(
+    # centre = case_when(
     #  ORG_UNIT_LEVEL_NAME %in% c("Vårdcentral") ~ "",
     # ORG_UNIT_LEVEL_NAME %in% c("Fristående hjärtmottagning") ~ "Fristående enhet",
-    #  TRUE ~ center
+    #  TRUE ~ centre
     #  )#,
-    # i regioner ingår ej vc
-    # regionvc = region,
-    # region = case_when(
+    # i countyer ingår ej vc
+    # countyvc = county,
+    # county = case_when(
     #  ORG_UNIT_LEVEL_NAME %in% c("Vårdcentral") ~ "",
-    #  TRUE ~ region
+    #  TRUE ~ county
     # )
   )
 
 rsdata <- rsdata %>%
   mutate(
-    region = factor(region),
-    center = factor(center)
+    county = factor(county),
+    centre = factor(centre)
   )

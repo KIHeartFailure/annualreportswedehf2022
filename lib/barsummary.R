@@ -42,7 +42,7 @@ barsummary <- function(qi = qitmp,
     data = all,
     beside = TRUE,
     axes = FALSE,
-    ylab = "Percent",
+    ylab = "Proportion (%)",
     xlab = "",
     col = all$cols,
     border = "white",
@@ -53,8 +53,8 @@ barsummary <- function(qi = qitmp,
 
   axis(2, seq(0, 100, 20), cex.axis = cexmy, las = 2)
 
-  abline(h = ll * 100, col = global_colslimit[2], lty = 2, lwd = 1)
-  abline(h = ul * 100, col = global_colslimit[1], lty = 2, lwd = 1)
+  abline(h = ll * 100, col = global_colslimit[2], lty = 2, lwd = 2)
+  abline(h = ul * 100, col = global_colslimit[1], lty = 2, lwd = 2)
 
   axis(1, at = b, labels = all$indexyear, line = -.5, tick = FALSE, cex.axis = cexmy, gap.axis = -10000000, las = 2)
 
@@ -66,6 +66,7 @@ barsummary <- function(qi = qitmp,
          inset = c(-0, -.28), xpd = NA,
          legend = labnams[2:3],
          lty = 2,
+         lwd = 2,
          col = global_colslimit,
          bty = "n",
          cex = cexmy,
