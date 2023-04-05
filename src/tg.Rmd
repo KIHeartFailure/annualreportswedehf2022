@@ -1,17 +1,11 @@
-```{r tgtid, cache=cacheon, fig.width=6, fig.height=5, fig.cap=paste0("Coverage, 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
+```{r tgtid, cache=cacheon, fig.width=5.5, fig.height=4.5, fig.cap=paste0("Coverage, 2003-", global_year, " (prevalent)/", global_year -1 , " (incident)")}
 
 cexmy <- 0.7
 # c(bottom, left, top, right) default c(5, 4, 4, 2) + 0.1.
 par(mar = c(4, 4, 0.5, 0.5) + 0.1)
 
-plot(tg_overtime$ar,
-  tg_overtime$inc,
-  type = "b",
-  # type = "l",
-  pch = 19,
-  col = global_cols[2],
-  lty = 1,
-  lwd = 3,
+plot(1,
+  type = "n",
   # cex = 1.2,
   axes = FALSE,
   xaxs = "i",
@@ -21,6 +15,43 @@ plot(tg_overtime$ar,
   xlab = labnams[1],
   cex.lab = cexmy,
   ylim = c(0, 45)
+)
+
+xa <- 2003:global_year
+ya <- c(seq(0, 40, 5), 45)
+
+axis(2,
+  at = ya,
+  c(seq(0, 40, 5), 100),
+  cex.axis = cexmy, las = 2
+)
+plotrix::axis.break(2, 42.5, style = "slash")
+
+axis(1, at = xa, cex.axis = cexmy)
+
+abline(v = 1:global_year, lty = 1, col = "gray", lwd = 1)
+abline(h = ya, lty = 1, col = "gray", lwd = 1)
+
+box(bty = "l")
+
+matplot(tg_overtime$ar,
+  tg_overtime$inc,
+  type = "b",
+  # type = "l",
+  pch = 19,
+  col = global_cols[2],
+  lty = 1,
+  lwd = 3,
+  # cex = 1.2,
+  #  axes = FALSE,
+  #  xaxs = "i",
+  #  yaxs = "i",
+  #  xlim = c(2003 - 0.3, global_year + 0.3),
+  #  ylab = "Covarage (%)",
+  #  xlab = labnams[1],
+  #  cex.lab = cexmy,
+  #  ylim = c(0, 45),
+  add = T
 )
 matplot(tg_overtime$ar,
   tg_overtime$prev,
@@ -32,20 +63,9 @@ matplot(tg_overtime$ar,
   add = T
 )
 
-box(bty = "l")
-
-axis(2,
-  at = c(seq(0, 40, 5), 45),
-  c(seq(0, 40, 5), 100),
-  cex.axis = cexmy, las = 2
-)
-plotrix::axis.break(2, 42.5, style = "slash")
-
-axis(1, at = 2003:global_year, cex.axis = cexmy)
-
 legend(
   x = 2003, y = 40, legend = c("Prevalent", "Incident"),
-  bty = "n", col = global_cols[1:2], lwd = 3,  
+  bty = "n", col = global_cols[1:2], lwd = 3,
   cex = cexmy
 )
 ```

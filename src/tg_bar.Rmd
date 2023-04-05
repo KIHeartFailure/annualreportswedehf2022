@@ -47,6 +47,7 @@ tgfunc <- function(tgtype) {
   # c(bottom, left, top, right)
   par(mar = c(3, 11, .1, 1.5) + 0.1)
 
+
   b <- barplot(percent ~ county,
     data = all,
     horiz = TRUE,
@@ -62,7 +63,25 @@ tgfunc <- function(tgtype) {
     xlim = c(0, 100)
   )
 
-  axis(1, seq(0, 100, 20), cex.axis = cexmy)
+  abline(v = seq(0, 100, 10), lty = 1, col = "gray", lwd = 1)
+
+  b <- barplot(percent ~ county,
+    data = all,
+    horiz = TRUE,
+    axes = FALSE,
+    xlab = "Proportion (%)",
+    ylab = "",
+    xaxs = "i", yaxs = "i",
+    col = all$cols,
+    width = 0.1,
+    border = "white",
+    names.arg = NA,
+    cex.lab = cexmy,
+    xlim = c(0, 100), 
+    add = T
+  )
+
+  axis(1, seq(0, 100, 10), cex.axis = cexmy)
 
   axis(2, at = b, labels = all$county, line = 4.3, tick = FALSE, cex.axis = cexmy, las = 2, gap.axis = -10000000)
 

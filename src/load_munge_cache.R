@@ -16,14 +16,15 @@ source("./munge/01-clean_missing.R")
 source("./munge/02-fixcenter.R")
 source("./munge/03-fixvars.R")
 source("./munge/04-qi.R")
+source("./munge/05-tg.R")
 
 ProjectTemplate::cache("rsdata")
 
 ProjectTemplate::cache("qiinfo")
 ProjectTemplate::cache("qiinfosv")
 
-#ProjectTemplate::cache("tg_lan")
-#ProjectTemplate::cache("tg_overtime")
+ProjectTemplate::cache("tg_lan")
+ProjectTemplate::cache("tg_overtime")
 
 labnams <- c("Year", "Upper target level", "Lower target level", "Unknown")
 ProjectTemplate::cache("labnams")

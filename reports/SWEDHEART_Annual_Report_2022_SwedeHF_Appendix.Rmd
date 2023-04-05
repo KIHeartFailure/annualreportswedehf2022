@@ -57,7 +57,7 @@ knitr::opts_knit$set(root.dir = normalizePath("../"))
 # 2. Load packages listed in config/global.dcf
 # 3. Import functions and code in lib directory
 
-ProjectTemplate::reload.project()
+ProjectTemplate::reload.project(data_loading = T)
 
 cacheon <- TRUE
 ```             
@@ -103,17 +103,13 @@ including March 31 of the year following the relevant year are included.
 
 **Denominator incident coverage:** Individuals registered with heart failure (I11.0, I13.0, I13.2, I25.5, I42.0, I42.6, I42.7, I50.0, I50.1, I50.9) for the first time during the current year, either in SwedeHF or in the National Patient Register.
 
-**The coverage will be calculated in April 2023 - Figures coming.** 
+```{r, child = "./src/tg.Rmd"}
 
----
-#```{r, child = "./src/tg.Rmd"}
+```
 
-#```
+```{r, child = "./src/tg_bar.Rmd"}
 
-#```{r, child = "./src/tg_bar.Rmd"}
-
-#```
----
+```
 
 \clearpage
 

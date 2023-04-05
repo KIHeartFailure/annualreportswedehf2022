@@ -1,7 +1,7 @@
 
 ProjectTemplate::reload.project(munge = F, data_loading = F)
 
-datapath = "./raw-data/årsrapport_2022/"
+datapath <- "./raw-data/årsrapport_2022/"
 
 # Import data from UCR ----------------------------------------------------
 
@@ -22,25 +22,25 @@ save(file = "./data/rawData_rs.RData", list = c(
 ))
 
 # tg
-# prevtime <- read.xlsx("./raw-data/tg/2617_2022 RiksSvikt - TG Prev mot Prev - Huvuddiagnos 2010-2021 2022-04-01_klar_LB.xlsx",
-#   sheet = "Län per år"
-# )
-# inctime <- read.xlsx("./raw-data/tg/2617_2022 RiksSvikt - TG Inc mot Inc 2003-2020 - Registrering inom 1 år 2022-04-01 Lev2_klar_LB.xlsx",
-#   sheet = "Län per år"
-# )
-# prev <- read.xlsx("./raw-data/tg/2617_2022 RiksSvikt - TG Prev mot Prev - Huvuddiagnos 2010-2021 2022-04-01_klar_LB.xlsx",
-#   sheet = "2021"
-# )
-# inc <- read.xlsx("./raw-data/tg/2617_2022 RiksSvikt - TG Inc mot Inc 2003-2020 - Registrering inom 1 år 2022-04-01 Lev2_klar_LB.xlsx",
-#   sheet = "2020"
-# )
-# 
-# prev <- prev %>% as_tibble(.name_repair = "unique")
-# inc <- inc %>% as_tibble(.name_repair = "unique")
-# 
-# save(file = "./data/rawData_tg.RData", list = c(
-#   "prevtime", "inctime", "prev", "inc"
-# ))
+prevtime <- read.xlsx("./raw-data/tg/6137_2023 RiksSvikt - TG Prev mot Prev 2010-2022 - Huvuddiagnos 2023-04-05_klar_LB.xlsx",
+  sheet = "Län per år"
+)
+inctime <- read.xlsx("./raw-data/tg/6137_2023 RiksSvikt - TG Inc mot Inc 2003-2021 - Registrering inom 1 år 2023-04-05_klar_LB.xlsx",
+  sheet = "Län per år"
+)
+prev <- read.xlsx("./raw-data/tg/6137_2023 RiksSvikt - TG Prev mot Prev 2010-2022 - Huvuddiagnos 2023-04-05_klar_LB.xlsx",
+  sheet = "2022"
+)
+inc <- read.xlsx("./raw-data/tg/6137_2023 RiksSvikt - TG Inc mot Inc 2003-2021 - Registrering inom 1 år 2023-04-05_klar_LB.xlsx",
+  sheet = "2021"
+)
+
+prev <- prev %>% as_tibble(.name_repair = "unique")
+inc <- inc %>% as_tibble(.name_repair = "unique")
+
+save(file = "./data/rawData_tg.RData", list = c(
+  "prevtime", "inctime", "prev", "inc"
+))
 
 # Get map data ------------------------------------------------------------
 
